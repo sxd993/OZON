@@ -17,7 +17,7 @@ def main() -> None:
     driver = None
     try:
         logging.warning("[INFO] Сбор данных начался. Пожалуйста, ожидайте...")
-        driver = preparation_before_work(item_name="Кран латунный")
+        driver = preparation_before_work(item_name="Кран шаровой")
 
         products_urls_list = page_down(driver=driver, class_name="q8j_24")
         write_products_urls(products_urls=products_urls_list)

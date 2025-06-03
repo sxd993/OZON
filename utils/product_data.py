@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
 
 
 def _get_stars_reviews(soup: BeautifulSoup) -> tuple[str | None, str | None]:
@@ -98,15 +99,38 @@ def _get_product_name(soup: BeautifulSoup) -> str:
         return ""
 
 
+from bs4 import BeautifulSoup, Tag
+import logging
+
 def _get_salesman_name(soup: BeautifulSoup) -> str | None:
     """Функция для получения имени продавца."""
     try:
-        salesman_elements = soup.find_all("div", class_="t1k_28")
-        if salesman_elements:
-            salesman = salesman_elements[0].text.strip()
-            logging.info(f"Найден продавец: {salesman}")
-            return salesman
-        logging.warning("Не найден продавец с классом l5k_28")
+        # Попытка 1: Ищем ссылки с /seller/ в href
+        salesman_elements = soup.select("a[href*='/seller/']")
+        for element in salesman_elements:
+            href = element.get('href', '').lower()
+            text = element.text.strip()
+            # Пропускаем ссылки с 'reviews', 'info' или пустым/коротким текстом
+            if 'reviews' in href or 'info' in href or len(text) < 2:
+                continue
+            # Проверяем, что текст не пустой и выглядит как имя продавца
+            if text:
+                logging.info(f"Найден продавец по селектору 'a[href*='/seller/']': {text}")
+                return text
+        logging.warning("Не найден подходящий продавец по селектору 'a[href*='/seller/']'")
+
+        # Попытка 2: Ищем по атрибуту title, если он содержит имя
+        title_elements = soup.select("a[title]")
+        for element in title_elements:
+            text = element.text.strip()
+            href = element.get('href', '').lower()
+            # Проверяем, что текст совпадает с title и не пустой
+            if text and text == element.get('title', '').strip() and 'seller' in href:
+                logging.info(f"Найден продавец по селектору 'a[title]' и href: {text}")
+                return text
+        logging.warning("Не найден продавец по селектору 'a[title]'")
+
+        logging.warning("Не удалось найти имя продавца ни одним методом")
         return None
     except Exception as e:
         logging.error(f"Ошибка при получении имени продавца: {e}")
@@ -125,27 +149,111 @@ def _get_product_id(driver: WebDriver) -> str:
         return None
 
 
-
 def _get_product_brand(soup: BeautifulSoup) -> str | None:
-    """Функция для получения бренда товара."""
+    """Функция для получения бренда товара из хлебных крошек."""
     try:
-        # Ищем блок характеристик, где может быть бренд
-        characteristics = soup.find_all("dl", class_="q4b10-a zd6_12")
-        for char in characteristics:
-            if not isinstance(char, Tag):
-                continue
-            title_element = char.find("dt")
-            value_element = char.find("dd")
-            title = title_element.get_text(strip=True) if isinstance(title_element, Tag) else None
-            value = value_element.get_text(strip=True) if isinstance(value_element, Tag) else None
-            if title and "Бренд" in title:
-                logging.info(f"Найден бренд: {value}")
-                return value
-        logging.warning("Не найден бренд товара")
-        return None
+        breadcrumbs = soup.find("div", {"data-widget": "breadCrumbs"})
+        if not breadcrumbs:
+            logging.warning("Блок хлебных крошек не найден.")
+            return None
+
+        breadcrumb_items = breadcrumbs.find_all("li")
+        if not breadcrumb_items:
+            logging.warning("Элементы хлебных крошек не найдены.")
+            return None
+
+        last_item = breadcrumb_items[-1]
+        brand_tag = last_item.find("span")
+        if brand_tag:
+            brand = brand_tag.get_text(strip=True)
+            logging.info(f"Найден бренд в последнем элементе хлебных крошек: {brand}")
+            return brand
+        else:
+            logging.warning("Тег <span> в последнем элементе хлебных крошек не найден.")
+
     except Exception as e:
-        logging.error(f"Ошибка при получении бренда: {e}")
+        logging.warning(f"Ошибка при поиске бренда в хлебных крошках: {e}")
+
+    # Резервный способ — поиск по лейблу "Бренд"
+    try:
+        for tag in soup.find_all(['span', 'div', 'p', 'dt']):
+            if 'бренд' in tag.get_text(strip=True).lower():
+                next_el = tag.find_next(['span', 'div', 'dd', 'p'])
+                if next_el and next_el.text.strip():
+                    brand = next_el.text.strip()
+                    logging.info(f"Найден бренд рядом с меткой 'Бренд': {brand}")
+                    return brand
+    except Exception as e:
+        logging.warning(f"Ошибка при поиске бренда рядом с меткой 'Бренд': {e}")
+
+    logging.warning("Не удалось найти бренд товара ни одним из способов.")
+    return None
+
+
+def get_ozon_seller_info(url: str) -> str | None:
+    logging.basicConfig(level=logging.INFO)
+    try:
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        driver = webdriver.Chrome(options=options)
+
+        driver.get(url)
+        wait = WebDriverWait(driver, 20)
+
+        # Попытаемся найти элемент с нужным path, но на всякий случай ищем родителя с кликабельным тегом
+        elements = driver.find_elements(By.XPATH, "//*[name()='svg']/*[name()='path' and contains(@d, 'M8 0c4.964 0 8 3.036 8 8')]")
+
+        if not elements:
+            logging.warning("Кнопка с восклицательным знаком не найдена")
+            return None
+
+        logging.info(f"Найдено {len(elements)} элементов с нужным path")
+
+        # Берём первого предка, у которого есть обработчик клика
+        clickable_element = None
+        for el in elements:
+            parent = el.find_element(By.XPATH, "./ancestor::button[1]")
+            if parent:
+                clickable_element = parent
+                break
+
+        if clickable_element is None:
+            logging.warning("Не удалось найти кликабельный элемент-родитель кнопки")
+            return None
+
+        logging.info("Кликаем по кнопке с восклицательным знаком")
+        clickable_element.click()
+
+        # Ждём появления блока с данными продавца
+        seller_block = wait.until(EC.presence_of_element_located((
+            By.CSS_SELECTOR,
+            "div.ea01-a2.ea01-b2"
+        )))
+
+        # Маленькая задержка, чтобы блок точно прогрузился
+        tm.sleep(1)
+
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        block = soup.select_one("div.ea01-a2.ea01-b2")
+
+        if block:
+            paragraphs = block.select("p.kr5_27")
+            info_lines = [p.get_text(strip=True) for p in paragraphs]
+            seller_info = "\n".join(info_lines)
+            logging.info(f"Информация о продавце: {seller_info}")
+            return seller_info
+        else:
+            logging.warning("Блок с информацией о продавце не найден.")
+            return None
+
+    except Exception as e:
+        logging.error(f"Ошибка при извлечении информации о продавце: {e}")
         return None
+
+    finally:
+        driver.quit()
 
 
 def collect_product_info(driver: WebDriver, url: str) -> dict[str, str | None]:
@@ -167,6 +275,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, str | None]:
         product_discount_price, product_base_price = _get_full_prices(soup)
         salesman = _get_salesman_name(soup)
         product_brand = _get_product_brand(soup)
+        seller_info = get_ozon_seller_info(soup)
 
         product_data = {
             "Артикул": product_id,
@@ -178,6 +287,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, str | None]:
             "Рейтинг": product_stars,
             "Отзывы": product_reviews,
             "Продавец": salesman,
+            "Данные": seller_info,
             "Ссылка": url,
         }
 
@@ -190,4 +300,4 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, str | None]:
         driver.switch_to.window(driver.window_handles[0])
         return {"Артикул": None, "Название товара": None, "Бренд": None, "Цена с картой озона": None,
                 "Цена со скидкой": None, "Цена": None, "Рейтинг": None, "Отзывы": None,
-                "Продавец": None, "Ссылка": url}
+                "Продавец": None, "Данные": None, "Ссылка": url}
