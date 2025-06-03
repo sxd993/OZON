@@ -19,7 +19,7 @@ def main() -> None:
         logging.warning("[INFO] Сбор данных начался. Пожалуйста, ожидайте...")
         driver = preparation_before_work(item_name="Кран шаровой")
 
-        products_urls_list = page_down(driver=driver, class_name="q8j_24")
+        products_urls_list = page_down(driver=driver, css_selector="a[href*='/product/']")
         write_products_urls(products_urls=products_urls_list)
         path_urls_products = Path("products_urls_dict_small.json")
         with path_urls_products.open("r", encoding="utf-8") as file:

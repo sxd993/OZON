@@ -27,3 +27,6 @@ def preparation_before_work(item_name: str) -> WebDriver:
     find_input.send_keys(Keys.ENTER)
     time.sleep(2)
     return driver
+'''
+Арбуз Арбуз
+'''
