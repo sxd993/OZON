@@ -34,8 +34,8 @@ def page_down(
                 if link.get_attribute("href") and '/product/' in link.get_attribute("href")
             }
             collected_links.update(new_links)
-            if len(collected_links) >= 15:
-                collected_links = set(list(collected_links)[:15])
+            if len(collected_links) >= 2:
+                collected_links = set(list(collected_links)[:2])
                 break
         except Exception as e:
             msg_error = "[!] Ошибка при сборе ссылок:"

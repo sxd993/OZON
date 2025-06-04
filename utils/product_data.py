@@ -190,70 +190,143 @@ def _get_product_brand(soup: BeautifulSoup) -> str | None:
     return None
 
 
-def get_ozon_seller_info(url: str) -> str | None:
-    logging.basicConfig(level=logging.INFO)
+import logging
+import time
+from typing import Optional
+from bs4 import BeautifulSoup
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
+
+def get_ozon_seller_info(driver: WebDriver, url: str) -> Optional[str]:
+    """
+    Извлекает информацию о продавце с сайта Ozon в виде строки.
+
+    :param driver: WebDriver для управления браузером.
+    :param url: URL страницы товара.
+    :return: Строка с данными продавца или None в случае ошибки.
+    """
+    logging.basicConfig(level=logging.DEBUG)
+    original_window = driver.current_window_handle
+    new_window = None
     try:
-        options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(options=options)
-
+        logging.debug(f"Начало обработки URL: {url}")
+        driver.switch_to.new_window("tab")
+        new_window = driver.current_window_handle
+        logging.debug(f"Открыта новая вкладка: {new_window}")
         driver.get(url)
-        wait = WebDriverWait(driver, 20)
+        wait = WebDriverWait(driver, 15)
 
-        # Попытаемся найти элемент с нужным path, но на всякий случай ищем родителя с кликабельным тегом
-        elements = driver.find_elements(By.XPATH, "//*[name()='svg']/*[name()='path' and contains(@d, 'M8 0c4.964 0 8 3.036 8 8')]")
-
-        if not elements:
-            logging.warning("Кнопка с восклицательным знаком не найдена")
+        # Ищем ссылку на страницу продавца
+        try:
+            seller_link = wait.until(EC.presence_of_element_located((
+                By.CSS_SELECTOR,
+                "a[href*='/seller/'][title]"
+            )))
+            seller_href = seller_link.get_attribute("href")
+            seller_name = seller_link.get_attribute("title")
+            logging.debug(f"Найдена ссылка на продавца: {seller_href}, название: {seller_name}")
+        except TimeoutException:
+            logging.warning(f"Ссылка на продавца не найдена на странице {url}")
             return None
 
-        logging.info(f"Найдено {len(elements)} элементов с нужным path")
-
-        # Берём первого предка, у которого есть обработчик клика
-        clickable_element = None
-        for el in elements:
-            parent = el.find_element(By.XPATH, "./ancestor::button[1]")
-            if parent:
-                clickable_element = parent
-                break
-
-        if clickable_element is None:
-            logging.warning("Не удалось найти кликабельный элемент-родитель кнопки")
+        # Переходим на страницу продавца
+        try:
+            driver.get(seller_href)
+            logging.debug(f"Перешли на страницу продавца: {seller_href}")
+            wait = WebDriverWait(driver, 15)
+        except WebDriverException as e:
+            logging.error(f"Ошибка при переходе на страницу продавца {seller_href}: {e}")
             return None
 
-        logging.info("Кликаем по кнопке с восклицательным знаком")
-        clickable_element.click()
+        # Ищем кнопку по SVG
+        try:
+            clickable_button = wait.until(EC.element_to_be_clickable((
+                By.XPATH,
+                "//*[name()='svg' and @class='ag01-b2']/*[name()='path' and @d='M12 21c5.584 0 9-3.416 9-9s-3.416-9-9-9-9 3.416-9 9 3.416 9 9 9m1-13a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-2 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0z']/ancestor::button"
+            )))
+            clickable_button.click()
+            logging.debug("Кнопка с SVG найдена и нажата")
+            time.sleep(2)  # Даём время для загрузки всплывающего блока
+        except TimeoutException:
+            logging.warning("Кнопка с указанным SVG не найдена")
+            # Пробуем альтернативный селектор
+            try:
+                clickable_button = wait.until(EC.element_to_be_clickable((
+                    By.CSS_SELECTOR,
+                    "button.ag01-a0"
+                )))
+                clickable_button.click()
+                logging.debug("Найдена и нажата альтернативная кнопка с классом ag01-a0")
+                time.sleep(2)
+            except TimeoutException:
+                logging.warning("Альтернативная кнопка ag01-a0 также не найдена")
+                return None
 
-        # Ждём появления блока с данными продавца
-        seller_block = wait.until(EC.presence_of_element_located((
-            By.CSS_SELECTOR,
-            "div.ea01-a2.ea01-b2"
-        )))
+        # Ищем блок с данными продавца
+        try:
+            seller_block = wait.until(EC.presence_of_element_located((
+                By.CSS_SELECTOR,
+                "div.e8l_11[data-widget='textBlock']"
+            )))
+            logging.debug("Найден блок с данными продавца")
+        except TimeoutException:
+            logging.warning("Блок с информацией о продавце не найден по селектору div.e8l_11[data-widget='textBlock']")
+            # Пробуем альтернативный селектор
+            try:
+                seller_block = wait.until(EC.presence_of_element_located((
+                    By.CSS_SELECTOR,
+                    "div[class*='seller-info'], div[class*='modal'], div[class*='popup']"
+                )))
+                logging.debug("Найден альтернативный блок с данными продавца")
+            except TimeoutException:
+                logging.warning("Альтернативный блок с данными продавца также не найден")
+                logging.debug(f"HTML страницы: {driver.page_source[:1000]}...")
+                return None
 
-        # Маленькая задержка, чтобы блок точно прогрузился
-        tm.sleep(1)
+        # Парсим страницу
+        soup = BeautifulSoup(driver.page_source, 'lxml')
+        block = soup.select_one("div.e8l_11[data-widget='textBlock'], div[class*='seller-info'], div[class*='modal'], div[class*='popup']")
+        if not block:
+            logging.warning("Блок с данными продавца не найден в DOM")
+            logging.debug(f"HTML страницы: {driver.page_source[:1000]}...")
+            return None
 
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        block = soup.select_one("div.ea01-a2.ea01-b2")
+        # Извлекаем данные продавца
+        seller_info = []
+        spans = block.select("span.tsBody400Small, span[class*='text'], p, div")
+        logging.debug(f"Найдено {len(spans)} элементов для извлечения текста")
+        for span in spans:
+            text = span.get_text(strip=True)
+            if text:
+                lines = text.split('\n')
+                seller_info.extend(line.strip() for line in lines if line.strip())
+                logging.debug(f"Извлечён текст: {text}")
 
-        if block:
-            paragraphs = block.select("p.kr5_27")
-            info_lines = [p.get_text(strip=True) for p in paragraphs]
-            seller_info = "\n".join(info_lines)
-            logging.info(f"Информация о продавце: {seller_info}")
-            return seller_info
+        # Объединяем данные в строку
+        result = "; ".join(seller_info) if seller_info else None
+        if result:
+            logging.info(f"Извлечена информация о продавце: {result}")
         else:
-            logging.warning("Блок с информацией о продавце не найден.")
-            return None
+            logging.warning("Данные продавца пусты")
+        return result
 
     except Exception as e:
-        logging.error(f"Ошибка при извлечении информации о продавце: {e}")
+        logging.error(f"Общая ошибка при извлечении информации о продавце для URL {url}: {e}")
         return None
 
     finally:
-        driver.quit()
+        try:
+            if new_window:
+                driver.switch_to.window(new_window)
+                driver.close()
+                logging.debug(f"Закрыта вкладка: {new_window}")
+            driver.switch_to.window(original_window)
+            logging.debug(f"Вернулись к исходной вкладке: {original_window}")
+        except Exception as e:
+            logging.error(f"Ошибка при закрытии вкладки или возврате к исходной: {e}")
 
 
 def collect_product_info(driver: WebDriver, url: str) -> dict[str, str | None]:
@@ -275,7 +348,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, str | None]:
         product_discount_price, product_base_price = _get_full_prices(soup)
         salesman = _get_salesman_name(soup)
         product_brand = _get_product_brand(soup)
-        seller_info = get_ozon_seller_info(soup)
+        seller_info = get_ozon_seller_info(driver, url)
 
         product_data = {
             "Артикул": product_id,
@@ -301,3 +374,6 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, str | None]:
         return {"Артикул": None, "Название товара": None, "Бренд": None, "Цена с картой озона": None,
                 "Цена со скидкой": None, "Цена": None, "Рейтинг": None, "Отзывы": None,
                 "Продавец": None, "Данные": None, "Ссылка": url}
+    
+
+    '''Вова'''
