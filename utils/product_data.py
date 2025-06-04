@@ -202,22 +202,22 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException,
 
 def get_ozon_seller_info(driver: WebDriver, url: str) -> Optional[str]:
     """
-    Извлекает информацию о продавце с сайта Ozon в виде строки.
+    Извлекает информацию о продавце с сайта Ozon в виде строки, беря только третий блок с data-widget="textBlock".
 
     :param driver: WebDriver для управления браузером.
     :param url: URL страницы товара.
-    :return: Строка с данными продавца или None в случае ошибки.
+    :return: Строка с данными третьего блока продавца или None в случае ошибки.
     """
     logging.basicConfig(level=logging.DEBUG)
     original_window = driver.current_window_handle
     new_window = None
     try:
-        logging.debug(f"Начало обработки URL: {url}")
+        logging.debug(f"Начало обработки URL: {url} at {time.strftime('%H:%M:%S', time.localtime())}")
         driver.switch_to.new_window("tab")
         new_window = driver.current_window_handle
         logging.debug(f"Открыта новая вкладка: {new_window}")
         driver.get(url)
-        wait = WebDriverWait(driver, 15)
+        wait = WebDriverWait(driver, 25)
 
         # Ищем ссылку на страницу продавца
         try:
@@ -236,81 +236,67 @@ def get_ozon_seller_info(driver: WebDriver, url: str) -> Optional[str]:
         try:
             driver.get(seller_href)
             logging.debug(f"Перешли на страницу продавца: {seller_href}")
-            wait = WebDriverWait(driver, 15)
+            wait = WebDriverWait(driver, 25)
         except WebDriverException as e:
             logging.error(f"Ошибка при переходе на страницу продавца {seller_href}: {e}")
             return None
 
-        # Ищем кнопку по SVG
-        try:
-            clickable_button = wait.until(EC.element_to_be_clickable((
-                By.XPATH,
-                "//*[name()='svg' and @class='ag01-b2']/*[name()='path' and @d='M12 21c5.584 0 9-3.416 9-9s-3.416-9-9-9-9 3.416-9 9 3.416 9 9 9m1-13a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-2 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0z']/ancestor::button"
-            )))
-            clickable_button.click()
-            logging.debug("Кнопка с SVG найдена и нажата")
-            time.sleep(2)  # Даём время для загрузки всплывающего блока
-        except TimeoutException:
-            logging.warning("Кнопка с указанным SVG не найдена")
-            # Пробуем альтернативный селектор
+        # Ищем кнопку по SVG с повторными попытками
+        max_attempts = 3
+        for attempt in range(max_attempts):
             try:
                 clickable_button = wait.until(EC.element_to_be_clickable((
-                    By.CSS_SELECTOR,
-                    "button.ag01-a0"
+                    By.XPATH,
+                    "//*[name()='svg' and @class='ag01-b2']/*[name()='path' and @d='M12 21c5.584 0 9-3.416 9-9s-3.416-9-9-9-9 3.416-9 9 3.416 9 9 9m1-13a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-2 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0z']/ancestor::button"
                 )))
                 clickable_button.click()
-                logging.debug("Найдена и нажата альтернативная кнопка с классом ag01-a0")
-                time.sleep(2)
+                logging.debug(f"Кнопка с SVG найдена и нажата (попытка {attempt + 1})")
+                time.sleep(7)  # Задержка 7 секунд для загрузки блоков
+                break
             except TimeoutException:
-                logging.warning("Альтернативная кнопка ag01-a0 также не найдена")
-                return None
+                logging.warning(f"Кнопка с указанным SVG не найдена (попытка {attempt + 1})")
+                if attempt == max_attempts - 1:
+                    logging.error("Кнопка с SVG не найдена после всех попыток")
+                    return None
+                time.sleep(3)  # Пауза 3 секунды перед повторной попыткой
 
-        # Ищем блок с данными продавца
+        # Ищем все блоки с данными продавца
         try:
-            seller_block = wait.until(EC.presence_of_element_located((
+            seller_blocks = wait.until(EC.presence_of_all_elements_located((
                 By.CSS_SELECTOR,
-                "div.e8l_11[data-widget='textBlock']"
+                "div[data-widget='textBlock']"
             )))
-            logging.debug("Найден блок с данными продавца")
+            logging.debug(f"Найдено {len(seller_blocks)} блоков с data-widget='textBlock'")
         except TimeoutException:
-            logging.warning("Блок с информацией о продавце не найден по селектору div.e8l_11[data-widget='textBlock']")
-            # Пробуем альтернативный селектор
-            try:
-                seller_block = wait.until(EC.presence_of_element_located((
-                    By.CSS_SELECTOR,
-                    "div[class*='seller-info'], div[class*='modal'], div[class*='popup']"
-                )))
-                logging.debug("Найден альтернативный блок с данными продавца")
-            except TimeoutException:
-                logging.warning("Альтернативный блок с данными продавца также не найден")
-                logging.debug(f"HTML страницы: {driver.page_source[:1000]}...")
-                return None
-
-        # Парсим страницу
-        soup = BeautifulSoup(driver.page_source, 'lxml')
-        block = soup.select_one("div.e8l_11[data-widget='textBlock'], div[class*='seller-info'], div[class*='modal'], div[class*='popup']")
-        if not block:
-            logging.warning("Блок с данными продавца не найден в DOM")
+            logging.warning("Блоки с информацией о продавце не найдены")
             logging.debug(f"HTML страницы: {driver.page_source[:1000]}...")
             return None
 
-        # Извлекаем данные продавца
+        # Парсим страницу для третьего блока
+        soup = BeautifulSoup(driver.page_source, 'lxml')
+        blocks = soup.select("div[data-widget='textBlock']")
+
+        # Берем третий блок (индекс 2)
+        third_block = blocks[-1]
+        logging.debug(f"Выбран третий блок: {str(third_block)[:1000]}...")
+
+        # Извлекаем данные из третьего блока
         seller_info = []
-        spans = block.select("span.tsBody400Small, span[class*='text'], p, div")
-        logging.debug(f"Найдено {len(spans)} элементов для извлечения текста")
-        for span in spans:
-            text = span.get_text(strip=True)
-            if text:
-                lines = text.split('\n')
-                seller_info.extend(line.strip() for line in lines if line.strip())
-                logging.debug(f"Извлечён текст: {text}")
+        divs = third_block.select("div.bq000-a")
+        logging.debug(f"Найдено {len(divs)} элементов div.bq000-a в третьем блоке")
+        for div in divs:
+            spans = div.select("span.tsBody400Small")
+            for span in spans:
+                text = span.get_text(strip=True)
+                if text and text != "О магазине" and len(text) > 2:
+                    lines = text.split('\n')
+                    seller_info.extend(line.strip() for line in lines if line.strip() and line.strip() != "О магазине")
+                    logging.debug(f"Извлечён текст из третьего блока: {text}")
 
         # Объединяем данные в строку
         result = "; ".join(seller_info) if seller_info else None
         if result:
-            logging.info(f"Извлечена информация о продавце: {result}")
-        else:
-            logging.warning("Данные продавца пусты")
+            result = result.replace("Работает согласно графику Ozon", "").strip("; ").strip("")
         return result
 
     except Exception as e:
