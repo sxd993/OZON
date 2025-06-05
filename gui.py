@@ -1,14 +1,17 @@
 import sys
 import asyncio
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QProgressBar, QFileDialog
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel,
+    QLineEdit, QPushButton, QTextEdit, QProgressBar, QFileDialog
+)
 from PyQt5.QtCore import Qt, pyqtSignal, QObject
 from PyQt5 import QtGui
+from PyQt5.QtGui import QPixmap
 from main import main
 import qasync
 
 
 class TqdmToProgressBar(QObject):
-    """Класс для перенаправления обновлений tqdm в QProgressBar."""
     progress_updated = pyqtSignal(int)
     total_updated = pyqtSignal(int)
 
@@ -33,9 +36,57 @@ class ParserApp(QMainWindow):
     def initUI(self):
         self.setWindowTitle("Парсер Ozon")
         self.setGeometry(100, 100, 450, 500)
-        self.setStyleSheet("background-color: #f0f0f0;")
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #ffffff;
+                color: #000000;
+                font-family: 'Segoe UI', sans-serif;
+                font-size: 14px;
+            }
+            QLabel {
+                font-size: 14px;
+                color: #000000;
+            }
+            QLineEdit {
+                background-color: #ffffff;
+                border: 1px solid #000000;
+                padding: 6px;
+                border-radius: 6px;
+            }
+            QTextEdit {
+                background-color: #ffffff;
+                border: 1px solid #000000;
+                padding: 6px;
+                border-radius: 6px;
+            }
+            QProgressBar {
+                border: 1px solid #000000;
+                border-radius: 6px;
+                text-align: center;
+                height: 16px;
+            }
+            QProgressBar::chunk {
+                background-color: #000000;
+                width: 10px;
+                margin: 0.5px;
+            }
+            QPushButton {
+                background-color: #000000;
+                color: #ffffff;
+                border: none;
+                padding: 10px 16px;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+            QPushButton:hover {
+                background-color: #222222;
+            }
+            QPushButton:disabled {
+                background-color: #777777;
+                color: #dddddd;
+            }
+        """)
 
-        # Основной виджет и layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
@@ -43,120 +94,54 @@ class ParserApp(QMainWindow):
         main_layout.setSpacing(15)
         main_layout.setContentsMargins(20, 20, 20, 20)
 
-        # Заголовок
-        title_label = QLabel("Парсер Ozon")
-        title_label.setStyleSheet(
-            "font-size: 20px; font-weight: bold; color: #333;")
-        title_layout = QHBoxLayout()
-        title_layout.addStretch()
-        title_layout.addWidget(title_label)
-        title_layout.addStretch()
-        main_layout.addLayout(title_layout)
+        # --- ЛОГОТИП ---
+        logo_label = QLabel()
+        pixmap = QPixmap()
+        pixmap.load("img.png")
+        pixmap = pixmap.scaledToHeight(50, Qt.SmoothTransformation)
+        logo_label.setPixmap(pixmap)
+        logo_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(logo_label)
 
-        # Поле для поискового запроса
+        title_label = QLabel("Парсер Ozon")
+        title_label.setAlignment(Qt.AlignCenter)
+        title_label.setStyleSheet("font-size: 20px; font-weight: bold;")
+        main_layout.addWidget(title_label)
+
         self.query_label = QLabel("Поисковый запрос:")
-        self.query_label.setStyleSheet("font-size: 14px; color: #555;")
         self.query_input = QLineEdit()
         self.query_input.setPlaceholderText(
             "Введите запрос, например, 'смартфон'")
-        self.query_input.setStyleSheet(
-            "font-size: 14px; padding: 5px; border: 1px solid #ccc; border-radius: 5px;")
-        query_layout = QHBoxLayout()
-        query_layout.addStretch()
-        query_layout.addWidget(self.query_input, 1)
-        query_layout.addStretch()
         main_layout.addWidget(self.query_label)
-        main_layout.addLayout(query_layout)
+        main_layout.addWidget(self.query_input)
 
-        # Поле для количества товаров для парсинга
         self.max_products_label = QLabel("Количество товаров для парсинга:")
-        self.max_products_label.setStyleSheet("font-size: 14px; color: #555;")
         self.max_products_input = QLineEdit("1000")
         self.max_products_input.setValidator(QtGui.QIntValidator(1, 1000000))
-        self.max_products_input.setStyleSheet(
-            "font-size: 14px; padding: 5px; border: 1px solid #ccc; border-radius: 5px;")
-        max_products_layout = QHBoxLayout()
-        max_products_layout.addStretch()
-        max_products_layout.addWidget(self.max_products_input, 1)
-        max_products_layout.addStretch()
         main_layout.addWidget(self.max_products_label)
-        main_layout.addLayout(max_products_layout)
+        main_layout.addWidget(self.max_products_input)
 
-        # Поле для имени выходного файла
         self.output_file_label = QLabel("Имя выходного файла:")
-        self.output_file_label.setStyleSheet("font-size: 14px; color: #555;")
         self.output_file_input = QLineEdit("ozon_products.xlsx")
-        self.output_file_input.setStyleSheet(
-            "font-size: 14px; padding: 5px; border: 1px solid #ccc; border-radius: 5px;")
-        output_file_layout = QHBoxLayout()
-        output_file_layout.addStretch()
-        output_file_layout.addWidget(self.output_file_input, 1)
+        file_layout = QHBoxLayout()
+        file_layout.addWidget(self.output_file_input)
         self.select_file_button = QPushButton("Выбрать папку")
-        self.select_file_button.setStyleSheet("""
-            QPushButton {
-                font-size: 14px; 
-                padding: 8px; 
-                background-color: #6B7280; 
-                color: white; 
-                border: none; 
-                border-radius: 5px;
-            }
-            QPushButton:hover {
-                background-color: #4B5563;
-            }
-        """)
         self.select_file_button.clicked.connect(self.select_output_directory)
-        output_file_layout.addWidget(self.select_file_button)
-        output_file_layout.addStretch()
+        file_layout.addWidget(self.select_file_button)
         main_layout.addWidget(self.output_file_label)
-        main_layout.addLayout(output_file_layout)
+        main_layout.addLayout(file_layout)
 
-        # Прогресс-бар
         self.progress_bar = QProgressBar()
-        self.progress_bar.setStyleSheet("font-size: 12px; padding: 5px;")
-        self.progress_bar.setTextVisible(True)
-        progress_layout = QHBoxLayout()
-        progress_layout.addStretch()
-        progress_layout.addWidget(self.progress_bar, 1)
-        progress_layout.addStretch()
-        main_layout.addLayout(progress_layout)
+        main_layout.addWidget(self.progress_bar)
 
-        # Кнопка для запуска парсинга
         self.parse_button = QPushButton("Начать парсинг")
-        self.parse_button.setStyleSheet("""
-            QPushButton {
-                font-size: 16px; 
-                padding: 10px; 
-                background-color: #4A90E2; 
-                color: white; 
-                border: none; 
-                border-radius: 5px;
-            }
-            QPushButton:hover {
-                background-color: #357ABD;
-            }
-            QPushButton:disabled {
-                background-color: #A0C4FF;
-            }
-        """)
-        parse_button_layout = QHBoxLayout()
-        parse_button_layout.addStretch()
-        parse_button_layout.addWidget(self.parse_button, 1)
-        parse_button_layout.addStretch()
         self.parse_button.clicked.connect(self.start_parsing)
-        main_layout.addLayout(parse_button_layout)
+        main_layout.addWidget(self.parse_button)
 
-        # Поле для статуса
         self.status_output = QTextEdit()
         self.status_output.setReadOnly(True)
-        self.status_output.setStyleSheet(
-            "font-size: 12px; border: 1px solid #ccc; border-radius: 5px; padding: 5px; background-color: white;")
         self.status_output.setFixedHeight(100)
-        status_layout = QHBoxLayout()
-        status_layout.addStretch()
-        status_layout.addWidget(self.status_output, 1)
-        status_layout.addStretch()
-        main_layout.addLayout(status_layout)
+        main_layout.addWidget(self.status_output)
 
     def select_output_directory(self):
         directory = QFileDialog.getExistingDirectory(
