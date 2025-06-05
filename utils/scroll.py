@@ -30,8 +30,8 @@ def page_down(
         }
         collected_links.update(new_links)
 
-        if len(collected_links) >= 50:
-            collected_links = set(list(collected_links)[:50])
+        if len(collected_links) >= colvo:
+            collected_links = set(list(collected_links)[:colvo])
             break
         
         new_height = driver.execute_script("return document.body.scrollHeight")
@@ -42,3 +42,4 @@ def page_down(
         last_height = new_height
   
     return list(collected_links)
+colvo = int(input('Введите количество парсируемых товаров: '))

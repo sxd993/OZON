@@ -13,7 +13,7 @@ def main() -> None:
     """Функция запуска программы."""
     driver = None
     try:
-        driver = preparation_before_work(item_name="Кран шаровой")
+        driver = preparation_before_work(item_name=input('Введите название товара: '))
         products_urls_list = page_down(driver=driver, css_selector="a[href*='/product/']")
         write_products_urls(products_urls=products_urls_list)
 
