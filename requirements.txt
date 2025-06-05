@@ -46,3 +46,6 @@ virtualenv==20.29.2
 websocket-client==1.8.0
 websockets==15.0
 wsproto==1.2.0
+pyqt5
+asyncio
+qasync
