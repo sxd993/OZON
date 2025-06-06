@@ -32,7 +32,7 @@ def collect_data(products_urls: dict[str, str], driver: WebDriver, progress_hand
         if progress_handler:
             progress_handler.update()
 
-        # Сохраняем данные в Excel каждые 50 продуктов
+        # Сохраняем данные в Excel каждые 2 продукта
         if processed_count % 2 == 0:
             write_data_to_excel(products_data=products_data,
                                 filename=output_file)
