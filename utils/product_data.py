@@ -221,35 +221,35 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
 
         return {
             "Артикул": product_id,
-            "Название товара": product_name,
+            "Название": product_name,
             "Бренд": product_brand,
+            "Ссылка на товар": url,
+            "Цена": product_base_price,
             "Цена с картой озона": product_ozon_card_price,
             "Цена со скидкой": product_discount_price,
-            "Цена": product_base_price,
-            "Рейтинг": product_stars,
             "Отзывы": product_reviews,
+            "Рейтинг": product_stars,
             "Продавец": salesman,
-            "Ссылка на продавца": seller_href,
             "Данные": seller_info[0],
             "ИНН": seller_info[1],
-            "Ссылка на товар": url,
+            "Ссылка на продавца": seller_href,
         }
 
     except (TimeoutException, WebDriverException, NoSuchWindowException):
         return {
             "Артикул": None,
-            "Название товара": None,
+            "Название": None,
             "Бренд": None,
+            "Ссылка на товар": url,
+            "Цена": None,
             "Цена с картой озона": None,
             "Цена со скидкой": None,
-            "Цена": None,
-            "Рейтинг": None,
             "Отзывы": None,
+            "Рейтинг": None,
             "Продавец": None,
-            "Ссылка на продавца": None,
             "Данные": None,
             "ИНН": None,
-            "Ссылка на товар": url,
+            "Ссылка на продавца": None,
         }
     finally:
         try:
