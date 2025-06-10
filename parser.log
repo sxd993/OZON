@@ -1,117 +1,437 @@
-2025-06-10 11:53:46,243 - INFO - Запуск парсера с запросом: смартфон, максимум товаров: 10
-2025-06-10 11:53:46,243 - INFO - Инициализация браузера
-2025-06-10 11:53:50,571 - INFO - Переход на сайт Ozon
-2025-06-10 11:53:56,181 - INFO - Ввод поискового запроса: смартфон
-2025-06-10 11:54:02,880 - INFO - Поисковый запрос отправлен
-2025-06-10 11:54:02,883 - INFO - Браузер успешно открыт
-2025-06-10 11:54:02,884 - INFO - Сбор ссылок на товары
-2025-06-10 11:54:02,884 - INFO - Начало прокрутки страницы для сбора ссылок на товары
-2025-06-10 11:54:04,183 - INFO - Собрано ссылок на товары: 24
-2025-06-10 11:54:04,183 - INFO - Достигнут целевой лимит: 10 товаров
-2025-06-10 11:54:04,183 - INFO - Прокрутка завершена, собрано ссылок: 10
-2025-06-10 11:54:04,183 - INFO - Найдено товаров: 10
-2025-06-10 11:54:04,183 - INFO - Достигнут лимит max_products: 10
-2025-06-10 11:54:04,193 - INFO - Рабочая вкладка открыта
-2025-06-10 11:54:04,193 - INFO - Начало сбора данных о товарах
-2025-06-10 11:54:04,193 - INFO - Начало сбора данных для 10 ссылок
-2025-06-10 11:54:04,193 - INFO - Обработка товара 1
-2025-06-10 11:54:04,193 - INFO - Обработка URL товара: https://www.ozon.ru/product/redmi-smartfon-redmi13-rostest-eac-8-256-gb-chernyy-1970797104/?at=QktJ1KmRMcW4klOHGNxJBmSO1ONE0s67jK5msRQPmEn
-2025-06-10 11:54:04,842 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/2749199/
-2025-06-10 11:54:06,656 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:06,717 - INFO - Извлечены данные продавца: ИП Фу Шоули; 325665800057835
-2025-06-10 11:54:06,717 - INFO - Данные о товаре собраны: Redmi Смартфон redmi13 Ростест (EAC) 8/256 ГБ, черный
-2025-06-10 11:54:06,717 - INFO - Обработка товара 2
-2025-06-10 11:54:06,717 - INFO - Обработка URL товара: https://www.ozon.ru/product/gk-retail-smartfon-rostest-eac-16-1-tb-temno-seryy-chernyy-1787663051/?at=ywtAPQE4qu1go3nFgO8mPZUXNlr7KHyYNgVjFoxjBDp
-2025-06-10 11:54:08,189 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/1713457/
-2025-06-10 11:54:09,672 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:09,725 - INFO - Извлечены данные продавца: ИП Каширина Галина Викторовна; 324010000003051
-2025-06-10 11:54:09,725 - INFO - Данные о товаре собраны: GK Retail Смартфон Ростест (EAC) 16/1 ТБ, темно-серый, черный
-2025-06-10 11:54:09,725 - INFO - Запись 2 товаров в Excel
-2025-06-10 11:54:09,725 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
-2025-06-10 11:54:09,747 - INFO - Excel-файл сохранён: ozon_products.xlsx
-2025-06-10 11:54:09,747 - INFO - Обработка товара 3
-2025-06-10 11:54:09,747 - INFO - Обработка URL товара: https://www.ozon.ru/product/tecno-smartfon-pova-6-pro-5g-rostest-eac-12-256-gb-chernyy-1469526277/?at=nRtrZ1QWAHEE53yyukMOE9xsW0Yw37iNXrY8oSAkEQR4
-2025-06-10 11:54:10,408 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/1452131/
-2025-06-10 11:54:11,799 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:11,845 - INFO - Извлечены данные продавца: ООО ООО "КИБЕР ЭНЕРДЖИ"127238, Россия, Москва, г Москва, Дмитровское шоссе, к 2, д; 321237700690864
-2025-06-10 11:54:11,845 - INFO - Данные о товаре собраны: Tecno Смартфон POVA 6 Pro 5G Ростест (EAC) 12/256 ГБ, черный
-2025-06-10 11:54:11,845 - INFO - Обработка товара 4
-2025-06-10 11:54:11,845 - INFO - Обработка URL товара: https://www.ozon.ru/product/oppo-smartfon-a5-pro-rostest-eac-8-256-gb-korichnevyy-1933995627/?at=GRt2NPo8KSEAxjmOs847gG9fRngo8ws7nZjY0Ip9m0jD
-2025-06-10 11:54:12,497 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/171048/
-2025-06-10 11:54:13,982 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:14,030 - INFO - Извлечены данные продавца: ООО ДС КОММЬЮНИКЕЙШНг. Москва, ул. Ленинская Слобода, д. 19 этаж 3 Ч. к. 21Ф1; 177746805708
-2025-06-10 11:54:14,030 - INFO - Данные о товаре собраны: OPPO Смартфон A5 Pro Ростест (EAC) 8/256 ГБ, коричневый
-2025-06-10 11:54:14,030 - INFO - Запись 4 товаров в Excel
-2025-06-10 11:54:14,030 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
-2025-06-10 11:54:14,034 - INFO - Excel-файл сохранён: ozon_products.xlsx
-2025-06-10 11:54:14,034 - INFO - Обработка товара 5
-2025-06-10 11:54:14,034 - INFO - Обработка URL товара: https://www.ozon.ru/product/tecno-smartfon-pop-7-sim-karta-megafon-2-64-gb-chernyy-1657216721/?at=jYtZ4wkOKCMAZ1jpC1jNEk6tVPNjWnur80KmLuwjY6nz
-2025-06-10 11:54:14,698 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/568238/
-2025-06-10 11:54:16,185 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:16,267 - INFO - Извлечены данные продавца: АО АО "МЕГАФОН РИТЕЙЛ"
-2025-06-10 11:54:16,267 - INFO - Данные о товаре собраны: Tecno Смартфон POP 7+SIM-карта МегаФон 2/64 ГБ, черный
-2025-06-10 11:54:16,268 - INFO - Обработка товара 6
-2025-06-10 11:54:16,268 - INFO - Обработка URL товара: https://www.ozon.ru/product/realme-smartfon-realme-note-60-rostest-eac-4-128-gb-goluboy-1773407493/?at=Z8tXqwyjrFl3E4q6UVBo8JNfxQ731jCGQnJrgsZoX7Yn
-2025-06-10 11:54:17,303 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/529384/
-2025-06-10 11:54:19,702 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:19,756 - INFO - Извлечены данные продавца: Wuhan Minghe Technology Co., Ltd
-2025-06-10 11:54:19,756 - INFO - Данные о товаре собраны: realme Смартфон realme Note 60 Ростест (EAC) 4/128 ГБ, голубой
-2025-06-10 11:54:19,756 - INFO - Запись 6 товаров в Excel
-2025-06-10 11:54:19,756 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
-2025-06-10 11:54:19,763 - INFO - Excel-файл сохранён: ozon_products.xlsx
-2025-06-10 11:54:19,763 - INFO - Обработка товара 7
-2025-06-10 11:54:19,763 - INFO - Обработка URL товара: https://www.ozon.ru/product/oppo-smartfon-a3x-rostest-eac-4-128-gb-bordovyy-1699432008/?at=vQtrnPolpHjM8owVfN47v6jfRwMz2VCDpDPA3T9xVJpY
-2025-06-10 11:54:20,493 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/171048/
-2025-06-10 11:54:22,062 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:22,129 - INFO - Извлечены данные продавца: ООО ДС КОММЬЮНИКЕЙШНг. Москва, ул. Ленинская Слобода, д. 19 этаж 3 Ч. к. 21Ф1; 177746805708
-2025-06-10 11:54:22,129 - INFO - Данные о товаре собраны: OPPO Смартфон A3x Ростест (EAC) 4/128 ГБ, бордовый
-2025-06-10 11:54:22,129 - INFO - Обработка товара 8
-2025-06-10 11:54:22,129 - INFO - Обработка URL товара: https://www.ozon.ru/product/oppo-smartfon-a3x-rostest-eac-4-128-gb-lazurnyy-1699428524/?at=J8tgW2Pn3s3B3j4VC64vvv0c0X74YQupNy61PcOORvoj
-2025-06-10 11:54:22,831 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/171048/
-2025-06-10 11:54:24,291 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:24,357 - INFO - Извлечены данные продавца: ООО ДС КОММЬЮНИКЕЙШНг. Москва, ул. Ленинская Слобода, д. 19 этаж 3 Ч. к. 21Ф1; 177746805708
-2025-06-10 11:54:24,357 - INFO - Данные о товаре собраны: OPPO Смартфон A3x Ростест (EAC) 4/128 ГБ, лазурный
-2025-06-10 11:54:24,357 - INFO - Запись 8 товаров в Excel
-2025-06-10 11:54:24,357 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
-2025-06-10 11:54:24,362 - INFO - Excel-файл сохранён: ozon_products.xlsx
-2025-06-10 11:54:24,362 - INFO - Обработка товара 9
-2025-06-10 11:54:24,362 - INFO - Обработка URL товара: https://www.ozon.ru/product/realme-smartfon-note-60x-rostest-eac-3-64-gb-chernyy-1771387609/?at=NOtwqQ16DcLLJQQQHRNvYgVCpo28RZH5n5lKrhmK17gE
-2025-06-10 11:54:25,047 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/216243/
-2025-06-10 11:54:26,526 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:26,571 - INFO - Извлечены данные продавца: ООО ООО "РМ КОММЬЮНИКЕЙШН"115280, г. Москва, вн.тер.г. Муниципальный округ Даниловский, улица Ленинская Слобода, Д. 19, помещение 21В/1H/5.1; 197746267355
-2025-06-10 11:54:26,571 - INFO - Данные о товаре собраны: realme Смартфон Note 60X Ростест (EAC) 3/64 ГБ, черный
-2025-06-10 11:54:26,571 - INFO - Обработка товара 10
-2025-06-10 11:54:26,571 - INFO - Обработка URL товара: https://www.ozon.ru/product/cubot-smartfon-max5-global-24-256-gb-chernyy-1813742165/?at=QktJ1KmRMcKRzMDDH52GpM9UZNO0N6SvN3o8JIAEnD8
-2025-06-10 11:54:27,315 - INFO - Получение данных продавца по ссылке: https://www.ozon.ru/seller/1863010/
-2025-06-10 11:54:29,145 - INFO - Нажата кнопка информации о продавце
-2025-06-10 11:54:29,208 - INFO - Извлечены данные продавца: HUNCHUN HUIDUODUO E-COMMERCE CO.,LTD
-2025-06-10 11:54:29,208 - INFO - Данные о товаре собраны: Cubot Смартфон MAX5 Global 24/256 ГБ, черный
-2025-06-10 11:54:29,208 - INFO - Запись 10 товаров в Excel
-2025-06-10 11:54:29,208 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
-2025-06-10 11:54:29,216 - INFO - Excel-файл сохранён: ozon_products.xlsx
-2025-06-10 11:54:29,216 - INFO - Запись оставшихся товаров в Excel
-2025-06-10 11:54:29,216 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
-2025-06-10 11:54:29,221 - INFO - Excel-файл сохранён: ozon_products.xlsx
-2025-06-10 11:54:29,221 - INFO - Сбор данных завершён
-2025-06-10 11:54:29,221 - INFO - Сбор данных завершён
-2025-06-10 11:54:29,221 - INFO - Excel-файл сохранён: ozon_products.xlsx
-2025-06-10 11:54:29,310 - INFO - Рабочая вкладка закрыта
-2025-06-10 11:54:29,318 - WARNING - Ошибка при закрытии драйвера: Message: invalid session id
+2025-06-10 12:01:06,128 - INFO - Запуск парсера с запросом: смартфон, максимум товаров: 10
+2025-06-10 12:01:06,128 - INFO - Инициализация браузера
+2025-06-10 12:01:11,183 - INFO - Переход на сайт Ozon
+2025-06-10 12:01:17,600 - INFO - Ввод поискового запроса: смартфон
+2025-06-10 12:01:23,965 - INFO - Поисковый запрос отправлен
+2025-06-10 12:01:23,968 - INFO - Браузер успешно открыт
+2025-06-10 12:01:23,969 - INFO - Сбор ссылок на товары
+2025-06-10 12:01:23,969 - INFO - Начало прокрутки страницы для сбора ссылок на товары
+2025-06-10 12:01:25,286 - INFO - Собрано ссылок на товары: 24
+2025-06-10 12:01:25,286 - INFO - Достигнут целевой лимит: 10 товаров
+2025-06-10 12:01:25,286 - INFO - Прокрутка завершена, собрано ссылок: 10
+2025-06-10 12:01:25,286 - INFO - Найдено товаров: 10
+2025-06-10 12:01:25,286 - INFO - Достигнут лимит max_products: 10
+2025-06-10 12:01:25,296 - INFO - Рабочая вкладка открыта
+2025-06-10 12:01:25,296 - INFO - Начало сбора данных о товарах
+2025-06-10 12:01:25,296 - INFO - Начало сбора данных для 10 ссылок
+2025-06-10 12:01:25,296 - INFO - Обработка товара 1
+2025-06-10 12:01:25,296 - INFO - Обработка URL товара: https://www.ozon.ru/product/oppo-smartfon-a3x-rostest-eac-4-128-gb-lazurnyy-1699428524/?at=BrtzXkZB1cXPLgr1FqAN3yKhz4vGWGCww8jZ0iKGKDQ7
+2025-06-10 12:01:27,188 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:27,203 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:28,247 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (201, 703). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
 Stacktrace:
-0   undetected_chromedriver             0x0000000102bbd728 undetected_chromedriver + 5891880
-1   undetected_chromedriver             0x0000000102bb4e7a undetected_chromedriver + 5856890
-2   undetected_chromedriver             0x0000000102685243 undetected_chromedriver + 418371
-3   undetected_chromedriver             0x00000001026c870f undetected_chromedriver + 694031
-4   undetected_chromedriver             0x00000001026fd3e6 undetected_chromedriver + 910310
-5   undetected_chromedriver             0x00000001026f7dbd undetected_chromedriver + 888253
-6   undetected_chromedriver             0x00000001026f6f57 undetected_chromedriver + 884567
-7   undetected_chromedriver             0x000000010264e77f undetected_chromedriver + 194431
-8   undetected_chromedriver             0x0000000102b7b4d0 undetected_chromedriver + 5620944
-9   undetected_chromedriver             0x0000000102b7f45f undetected_chromedriver + 5637215
-10  undetected_chromedriver             0x0000000102b568e2 undetected_chromedriver + 5470434
-11  undetected_chromedriver             0x0000000102b7fdcf undetected_chromedriver + 5639631
-12  undetected_chromedriver             0x0000000102b450a4 undetected_chromedriver + 5398692
-13  undetected_chromedriver             0x000000010264c957 undetected_chromedriver + 186711
-14  dyld                                0x0000000203934530 start + 3056
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:28,773 - INFO - Модальное окно найдено
+2025-06-10 12:01:28,855 - INFO - Извлечённые данные: ['ООО ДС КОММЬЮНИКЕЙШН', 'г. Москва, ул. Ленинская Слобода, д. 19 этаж 3 Ч. к. 21Ф', '1177746805708']
+2025-06-10 12:01:28,855 - INFO - Данные о товаре собраны: OPPO Смартфон A3x Ростест (EAC) 4/128 ГБ, лазурный
+2025-06-10 12:01:28,922 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:28,932 - INFO - Переключение на исходное окно
+2025-06-10 12:01:28,932 - INFO - Обработка товара 2
+2025-06-10 12:01:28,932 - INFO - Обработка URL товара: https://www.ozon.ru/product/xiaomi-smartfon-15-12-512-gb-belyy-1967368424/?at=k2toyRL17hZ06nlMijA4NMrInrWn0Pi4WD9vEfNmpYDV
+2025-06-10 12:01:30,007 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:30,030 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:31,072 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (264, 702). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:31,600 - INFO - Модальное окно найдено
+2025-06-10 12:01:31,676 - INFO - Извлечённые данные: ['ИП Безрядин Юрий Романович', '324774600168526']
+2025-06-10 12:01:31,676 - INFO - Данные о товаре собраны: Xiaomi Смартфон 15 12/512 ГБ, белый
+2025-06-10 12:01:31,739 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:31,744 - INFO - Переключение на исходное окно
+2025-06-10 12:01:31,744 - INFO - Запись 2 товаров в Excel
+2025-06-10 12:01:31,744 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
+2025-06-10 12:01:31,767 - INFO - Excel-файл сохранён: ozon_products.xlsx
+2025-06-10 12:01:31,767 - INFO - Обработка товара 3
+2025-06-10 12:01:31,767 - INFO - Обработка URL товара: https://www.ozon.ru/product/meizu-smartfon-meizu-mblu-22pro-rostest-eac-6-256-gb-chernyy-2212824600/?at=83tB5AJLlUxvorpghmVL5BcqBQwK4FENMwJvuZgQO8G
+2025-06-10 12:01:32,719 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:32,808 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:33,906 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (288, 703). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:34,430 - INFO - Модальное окно найдено
+2025-06-10 12:01:34,551 - INFO - Извлечённые данные: ['Binzhou Bincheng District Guaiguai E-commerce Co., Ltd.', 'Room 816-1, Economic Digital Industrial Park', 'CN, Binzhou City']
+2025-06-10 12:01:34,551 - INFO - Данные о товаре собраны: Meizu Смартфон Meizu Mblu 22Pro Ростест (EAC) 6/256 ГБ, черный
+2025-06-10 12:01:34,617 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:34,620 - INFO - Переключение на исходное окно
+2025-06-10 12:01:34,620 - INFO - Обработка товара 4
+2025-06-10 12:01:34,620 - INFO - Обработка URL товара: https://www.ozon.ru/product/gk-retail-smartfon-rostest-eac-16-1-tb-malinovyy-1842358415/?at=qQtJyx4lDcp4W4qATx8oVWxsnLqELGsAqppz8TOgDQzG
+2025-06-10 12:01:35,627 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:35,778 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:36,819 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (236, 703). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:37,345 - INFO - Модальное окно найдено
+2025-06-10 12:01:37,417 - INFO - Извлечённые данные: ['ИП Каширина Галина Викторовна', '324010000003051']
+2025-06-10 12:01:37,417 - INFO - Данные о товаре собраны: GK Retail Смартфон Ростест (EAC) 16/1 ТБ, малиновый
+2025-06-10 12:01:37,489 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:37,493 - INFO - Переключение на исходное окно
+2025-06-10 12:01:37,493 - INFO - Запись 4 товаров в Excel
+2025-06-10 12:01:37,493 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
+2025-06-10 12:01:37,501 - INFO - Excel-файл сохранён: ozon_products.xlsx
+2025-06-10 12:01:37,501 - INFO - Обработка товара 5
+2025-06-10 12:01:37,501 - INFO - Обработка URL товара: https://www.ozon.ru/product/tecno-smartfon-pop-7-sim-karta-megafon-2-64-gb-chernyy-1657216721/?at=46tR2nj3ysD8k3K5i11W8PVSyJBKkgFXPr4n4I03X90M
+2025-06-10 12:01:38,471 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:38,585 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:39,696 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (228, 703). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:40,245 - INFO - Модальное окно найдено
+2025-06-10 12:01:40,329 - INFO - Извлечённые данные: ['АО "МЕГАФОН РИТЕЙЛ"', 'г Москва, Оружейный пер, д 41, оф 558', '1027809220317']
+2025-06-10 12:01:40,329 - INFO - Данные о товаре собраны: Tecno Смартфон POP 7+SIM-карта МегаФон 2/64 ГБ, черный
+2025-06-10 12:01:40,405 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:40,408 - INFO - Переключение на исходное окно
+2025-06-10 12:01:40,408 - INFO - Обработка товара 6
+2025-06-10 12:01:40,408 - INFO - Обработка URL товара: https://www.ozon.ru/product/oppo-smartfon-a5-pro-rostest-eac-8-256-gb-olivkovyy-1936982238/?at=XQtkPg601F2909rtOVmYJQtgPZqo7uJ0k5B1UWOM40V
+2025-06-10 12:01:41,328 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:41,525 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:42,569 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (201, 703). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:43,096 - INFO - Модальное окно найдено
+2025-06-10 12:01:43,176 - INFO - Извлечённые данные: ['ООО ДС КОММЬЮНИКЕЙШН', 'г. Москва, ул. Ленинская Слобода, д. 19 этаж 3 Ч. к. 21Ф', '1177746805708']
+2025-06-10 12:01:43,176 - INFO - Данные о товаре собраны: OPPO Смартфон A5 Pro Ростест (EAC) 8/256 ГБ, оливковый
+2025-06-10 12:01:43,239 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:43,243 - INFO - Переключение на исходное окно
+2025-06-10 12:01:43,243 - INFO - Запись 6 товаров в Excel
+2025-06-10 12:01:43,243 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
+2025-06-10 12:01:43,250 - INFO - Excel-файл сохранён: ozon_products.xlsx
+2025-06-10 12:01:43,250 - INFO - Обработка товара 7
+2025-06-10 12:01:43,250 - INFO - Обработка URL товара: https://www.ozon.ru/product/huawei-smartfon-pura-70-12-256-gb-chernyy-1728097072/?at=VvtznE497cAPLlKvfJr5vWGuEgVgY1fv2Z9X6cvvKgo9
+2025-06-10 12:01:44,333 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:44,436 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:45,607 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (846, 703). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:46,143 - INFO - Модальное окно найдено
+2025-06-10 12:01:46,228 - WARNING - Параграфы не найдены в модальном окне
+2025-06-10 12:01:46,228 - INFO - Данные о товаре собраны: HUAWEI Смартфон Pura 70 12/256 ГБ, черный
+2025-06-10 12:01:46,304 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:46,308 - INFO - Переключение на исходное окно
+2025-06-10 12:01:46,308 - INFO - Обработка товара 8
+2025-06-10 12:01:46,308 - INFO - Обработка URL товара: https://www.ozon.ru/product/poco-smartfon-c75-eu-6-128-gb-chernyy-2003611123/?at=OgtELgP4JhE24ovlhBqxGmBfvQ3MVYUPrPmgizAQ5pz
+2025-06-10 12:01:47,396 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:47,564 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:48,613 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (294, 702). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:49,148 - INFO - Модальное окно найдено
+2025-06-10 12:01:49,235 - INFO - Извлечённые данные: ['ИП Соболь Влада Владимировна', '324290000003171']
+2025-06-10 12:01:49,235 - INFO - Данные о товаре собраны: Poco Смартфон C75 EU 6/128 ГБ, черный
+2025-06-10 12:01:49,304 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:49,307 - INFO - Переключение на исходное окно
+2025-06-10 12:01:49,307 - INFO - Запись 8 товаров в Excel
+2025-06-10 12:01:49,307 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
+2025-06-10 12:01:49,312 - INFO - Excel-файл сохранён: ozon_products.xlsx
+2025-06-10 12:01:49,312 - INFO - Обработка товара 9
+2025-06-10 12:01:49,312 - INFO - Обработка URL товара: https://www.ozon.ru/product/gk-retail-smartfon-rostest-eac-16-1-tb-chernyy-hrom-1785849800/?at=gpt41jgprh7xl9KLtQ7JjlmIzA9vryFW2JOzMsnzwOAm
+2025-06-10 12:01:50,275 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:50,549 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:51,603 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (236, 703). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:52,129 - INFO - Модальное окно найдено
+2025-06-10 12:01:52,205 - INFO - Извлечённые данные: ['ИП Каширина Галина Викторовна', '324010000003051']
+2025-06-10 12:01:52,205 - INFO - Данные о товаре собраны: GK Retail Смартфон Ростест (EAC) 16/1 ТБ, черный, хром
+2025-06-10 12:01:52,270 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:52,274 - INFO - Переключение на исходное окно
+2025-06-10 12:01:52,274 - INFO - Обработка товара 10
+2025-06-10 12:01:52,274 - INFO - Обработка URL товара: https://www.ozon.ru/product/realme-smartfon-note-60x-rostest-eac-3-64-gb-chernyy-1771387609/?at=DqtDLW601T7MOqrmU3z2kLAUN1X2JnHnvoL0ocqM2P0P
+2025-06-10 12:01:53,188 - INFO - Блок webCurrentSeller найден
+2025-06-10 12:01:53,270 - INFO - Кнопка найдена: <button aria-label="" class="ga01-a"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="ga01-a0" style="color: rgba(0, 26, 52, 0.2);"><path fill="currentColor" d="M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0"></path></svg></button>
+2025-06-10 12:01:54,356 - WARNING - Ошибка клика через Selenium: Message: element click intercepted: Element <button aria-label="" class="ga01-a">...</button> is not clickable at point (207, 702). Other element would receive the click: <div class="lq0_27 lq1_27" data-widget="webPdpGrid" style="width: auto;">...</div>
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010279b0b0 undetected_chromedriver + 782512
+4   undetected_chromedriver             0x0000000102798f0b undetected_chromedriver + 773899
+5   undetected_chromedriver             0x00000001027965a2 undetected_chromedriver + 763298
+6   undetected_chromedriver             0x0000000102795cc0 undetected_chromedriver + 761024
+7   undetected_chromedriver             0x000000010278834d undetected_chromedriver + 705357
+8   undetected_chromedriver             0x00000001027ba4e2 undetected_chromedriver + 910562
+9   undetected_chromedriver             0x0000000102787cc8 undetected_chromedriver + 703688
+10  undetected_chromedriver             0x00000001027ba69e undetected_chromedriver + 911006
+11  undetected_chromedriver             0x00000001027e2073 undetected_chromedriver + 1073267
+12  undetected_chromedriver             0x00000001027ba2b3 undetected_chromedriver + 910003
+13  undetected_chromedriver             0x0000000102786507 undetected_chromedriver + 697607
+14  undetected_chromedriver             0x0000000102787171 undetected_chromedriver + 700785
+15  undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+16  undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+17  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+18  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+19  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+20  undetected_chromedriver             0x0000000102c5f688 undetected_chromedriver + 5781128
+21  undetected_chromedriver             0x0000000102c5f850 undetected_chromedriver + 5781584
+22  undetected_chromedriver             0x0000000102c71a41 undetected_chromedriver + 5855809
+23  libsystem_pthread.dylib             0x00007ff817f76df1 _pthread_start + 99
+24  libsystem_pthread.dylib             0x00007ff817f72857 thread_start + 15
+, попытка через JavaScript
+2025-06-10 12:01:54,892 - INFO - Модальное окно найдено
+2025-06-10 12:01:54,974 - INFO - Извлечённые данные: ['ООО "РМ КОММЬЮНИКЕЙШН"', '115280, г. Москва, вн.тер.г. Муниципальный округ Даниловский, улица Ленинская Слобода, Д. 19, помещение 21В/1H/5.', '1197746267355']
+2025-06-10 12:01:54,974 - INFO - Данные о товаре собраны: realme Смартфон Note 60X Ростест (EAC) 3/64 ГБ, черный
+2025-06-10 12:01:55,036 - INFO - Вкладка товара закрыта
+2025-06-10 12:01:55,039 - INFO - Переключение на исходное окно
+2025-06-10 12:01:55,039 - INFO - Запись 10 товаров в Excel
+2025-06-10 12:01:55,039 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
+2025-06-10 12:01:55,044 - INFO - Excel-файл сохранён: ozon_products.xlsx
+2025-06-10 12:01:55,044 - INFO - Запись оставшихся товаров в Excel
+2025-06-10 12:01:55,044 - INFO - Запись данных в Excel-файл: ozon_products.xlsx
+2025-06-10 12:01:55,049 - INFO - Excel-файл сохранён: ozon_products.xlsx
+2025-06-10 12:01:55,049 - INFO - Сбор данных завершён
+2025-06-10 12:01:55,049 - INFO - Сбор данных завершён
+2025-06-10 12:01:55,049 - INFO - Excel-файл сохранён: ozon_products.xlsx
+2025-06-10 12:01:55,121 - INFO - Рабочая вкладка закрыта
+2025-06-10 12:01:55,128 - WARNING - Ошибка при закрытии драйвера: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000102c7a728 undetected_chromedriver + 5891880
+1   undetected_chromedriver             0x0000000102c71e7a undetected_chromedriver + 5856890
+2   undetected_chromedriver             0x0000000102742243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010278570f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001027ba3e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001027b4dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001027b3f57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010270b77f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000102c384d0 undetected_chromedriver + 5620944
+9   undetected_chromedriver             0x0000000102c3c45f undetected_chromedriver + 5637215
+10  undetected_chromedriver             0x0000000102c138e2 undetected_chromedriver + 5470434
+11  undetected_chromedriver             0x0000000102c3cdcf undetected_chromedriver + 5639631
+12  undetected_chromedriver             0x0000000102c020a4 undetected_chromedriver + 5398692
+13  undetected_chromedriver             0x0000000102709957 undetected_chromedriver + 186711
+14  dyld                                0x00000002037f6530 start + 3056
 
-2025-06-10 11:54:29,351 - INFO - Сборка мусора завершена
+2025-06-10 12:01:55,182 - INFO - Сборка мусора завершена
