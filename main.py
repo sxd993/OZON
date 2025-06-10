@@ -73,8 +73,8 @@ if __name__ == "__main__":
 
     asyncio.run(
         main(
-            query="смартфон",
-            max_products=10,
+            query="кран шаровой",
+            max_products=50,
             output_file="ozon_products.xlsx",
             progress_handler=None,
         )

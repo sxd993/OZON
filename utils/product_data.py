@@ -160,7 +160,7 @@ def get_ozon_seller_info(driver: WebDriver) -> Optional[str]:
             button.click()
         except Exception:
             driver.execute_script("arguments[0].click();", button)
-        time.sleep(0.5)
+        time.sleep(1)
 
         modal = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located(
@@ -217,7 +217,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
         product_discount_price, product_base_price = _get_full_prices(soup)
         salesman = _get_salesman_name(soup)
         product_brand = _get_product_brand(soup)
-        seller_info = get_ozon_seller_info(driver)
+        seller_info = get_ozon_seller_info(driver).rsplit(";", 1)
 
         return {
             "Артикул": product_id,
@@ -230,7 +230,8 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             "Отзывы": product_reviews,
             "Продавец": salesman,
             "Ссылка на продавца": seller_href,
-            "Данные": seller_info,
+            "Данные": seller_info[0],
+            "ИНН": seller_info[1],
             "Ссылка на товар": url,
         }
 
@@ -247,6 +248,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             "Продавец": None,
             "Ссылка на продавца": None,
             "Данные": None,
+            "ИНН": None,
             "Ссылка на товар": url,
         }
     finally:
