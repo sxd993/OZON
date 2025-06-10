@@ -1,13 +1,8 @@
 import logging
-import os
 
 
 def setup_logger(log_file: str = "parser.log") -> logging.Logger:
-    """
-    Настраивает логгер для записи в файл и консоль.
-    :param log_file: Имя файла для логов (по умолчанию 'parser.log').
-    :return: Настроенный объект логгера.
-    """
+    """Настраивает логгер для записи в файл и консоль."""
     logger = logging.getLogger("OzonParser")
     logger.setLevel(logging.INFO)
     logger.handlers.clear()

@@ -18,10 +18,8 @@ def preparation_before_work(item_name: str) -> WebDriver:
     driver = uc.Chrome(options=options)
     driver.implicitly_wait(5)
 
-    logger.info("Переход на сайт Ozon")
     driver.get(url="https://ozon.ru")
     time.sleep(5)
-    logger.info(f"Ввод поискового запроса: {item_name}")
     find_input = driver.find_element(By.NAME, "text")
     find_input.clear()
     time.sleep(2)
@@ -29,6 +27,5 @@ def preparation_before_work(item_name: str) -> WebDriver:
     time.sleep(2)
     find_input.send_keys(Keys.ENTER)
     time.sleep(1)
-    logger.info("Поисковый запрос отправлен")
 
     return driver

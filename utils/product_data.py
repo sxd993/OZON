@@ -28,7 +28,6 @@ def _get_stars_reviews(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str
                 return stars.strip(), reviews.strip()
         return None, None
     except Exception:
-        logger.warning("Не удалось извлечь рейтинг и отзывы")
         return None, None
 
 
@@ -49,7 +48,6 @@ def _get_sale_price(soup: BeautifulSoup) -> Optional[str]:
         price = price_span.text.strip().replace("\u2009", "").replace("₽", "").strip()
         return price
     except Exception:
-        logger.warning("Не удалось извлечь цену с Ozon Картой")
         return None
 
 
@@ -83,7 +81,6 @@ def _get_full_prices(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str]]
         )
         return discount_price, base_price
     except Exception:
-        logger.warning("Не удалось извлечь цены")
         return None, None
 
 
@@ -99,7 +96,6 @@ def _get_product_name(soup: BeautifulSoup) -> str:
         name = title_element.text.strip().replace("\t", "").replace("\n", " ")
         return name
     except Exception:
-        logger.warning("Не удалось извлечь название товара")
         return ""
 
 
@@ -116,7 +112,6 @@ def _get_salesman_name(soup: BeautifulSoup) -> Optional[str]:
                 return text
         return None
     except Exception:
-        logger.warning("Не удалось извлечь имя продавца")
         return None
 
 
@@ -127,7 +122,6 @@ def _get_product_id(driver: WebDriver) -> Optional[str]:
         product_id = element.text.split("Артикул: ")[1].strip()
         return product_id
     except Exception:
-        logger.warning("Не удалось извлечь артикул")
         return None
 
 
@@ -145,7 +139,6 @@ def _get_product_brand(soup: BeautifulSoup) -> Optional[str]:
         brand = brand_tag.get_text(strip=True) if brand_tag else None
         return brand
     except Exception:
-        logger.warning("Не удалось извлечь бренд")
         return None
 
 
@@ -157,60 +150,44 @@ def get_ozon_seller_info(driver: WebDriver) -> Optional[str]:
                 (By.CSS_SELECTOR, "div[data-widget='webCurrentSeller']")
             )
         )
-        logger.info("Блок webCurrentSeller найден")
-
         svg = seller_block.find_element(
             By.CSS_SELECTOR,
             "svg path[d='M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0']",
         )
         button = svg.find_element(By.XPATH, "./ancestor::button")
-        logger.info(f"Кнопка найдена: {button.get_attribute('outerHTML')}")
-
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable(button))
         try:
             button.click()
-        except Exception as e:
-            logger.warning(
-                f"Ошибка клика через Selenium: {e}, попытка через JavaScript"
-            )
+        except Exception:
             driver.execute_script("arguments[0].click();", button)
-        time.sleep(0.5)  # Минимальная задержка для модального окна
+        time.sleep(0.5)
 
         modal = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located(
                 (By.CSS_SELECTOR, "div[data-popper-placement='top']")
             )
         )
-        logger.info("Модальное окно найдено")
-
         soup = BeautifulSoup(driver.page_source, "lxml")
         modal_div = soup.select_one("div[data-popper-placement='top']")
         if not modal_div:
-            logger.warning("Модальное окно не найдено в HTML")
             return None
 
         paragraphs = modal_div.find_all("p")
         if not paragraphs:
-            logger.warning("Параграфы не найдены в модальном окне")
             return None
         seller_info = [p.get_text(strip=True) for p in paragraphs[:-1]]
-        logger.info(f"Извлечённые данные: {seller_info}")
-
         result = "; ".join(seller_info) if seller_info else None
         return result
 
-    except Exception as e:
-        logger.error(f"Ошибка при сборе данных о продавце: {e}")
+    except Exception:
         return None
 
 
 def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]]:
     """Собирает информацию о товаре с сайта Ozon."""
-    logger.info(f"Обработка URL товара: {url}")
     original_window = driver.current_window_handle
     new_window = None
     try:
-        # Открываем новую вкладку
         driver.switch_to.new_window("tab")
         new_window = driver.current_window_handle
         driver.get(url)
@@ -231,7 +208,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             )
             seller_href = seller_link.get_attribute("href")
         except TimeoutException:
-            logger.warning("Не удалось извлечь ссылку на продавца")
+            pass
 
         product_id = _get_product_id(driver)
         product_name = _get_product_name(soup)
@@ -242,7 +219,6 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
         product_brand = _get_product_brand(soup)
         seller_info = get_ozon_seller_info(driver)
 
-        logger.info(f"Данные о товаре собраны: {product_name}")
         return {
             "Артикул": product_id,
             "Название товара": product_name,
@@ -258,8 +234,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             "Ссылка на товар": url,
         }
 
-    except (TimeoutException, WebDriverException, NoSuchWindowException) as e:
-        logger.warning(f"Ошибка при обработке URL {url}: {str(e)}")
+    except (TimeoutException, WebDriverException, NoSuchWindowException):
         return {
             "Артикул": None,
             "Название товара": None,
@@ -279,8 +254,6 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             if new_window and new_window in driver.window_handles:
                 driver.switch_to.window(new_window)
                 driver.close()
-                logger.info("Вкладка товара закрыта")
             driver.switch_to.window(original_window)
-            logger.info("Переключение на исходное окно")
-        except Exception as e:
-            logger.warning(f"Ошибка при закрытии вкладки или переключении: {str(e)}")
+        except Exception:
+            pass

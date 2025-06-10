@@ -13,7 +13,6 @@ def collect_data(
     output_file: str = "ozon_products.xlsx",
 ) -> None:
     """Функция сбора данных."""
-    logger.info(f"Начало сбора данных для {len(products_urls)} ссылок")
     products_data = {}
     if progress_handler:
         progress_handler.set_total(len(products_urls))
@@ -25,7 +24,6 @@ def collect_data(
         data = collect_product_info(driver=driver, url=url)
         product_id = data.get("Артикул")
         if product_id is None:
-            logger.warning(f"Не найден артикул для URL: {url}")
             continue
         if product_id not in products_data:
             products_data[product_id] = data
@@ -33,10 +31,7 @@ def collect_data(
             progress_handler.update()
 
         if processed_count % 2 == 0:
-            logger.info(f"Запись {processed_count} товаров в Excel")
             write_data_to_excel(products_data=products_data, filename=output_file)
 
     if products_data:
-        logger.info("Запись оставшихся товаров в Excel")
         write_data_to_excel(products_data=products_data, filename=output_file)
-    logger.info("Сбор данных завершён")

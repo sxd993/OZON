@@ -10,16 +10,10 @@ def write_data_to_excel(
     products_data: dict[str, dict[str, str | None]],
     filename: str = "products.xlsx",
 ) -> None:
-    """
-    Записывает данные о продуктах в Excel-файл.
-    :param products_data: Словарь с данными о продуктах.
-    :param filename: Имя файла для сохранения (по умолчанию "products.xlsx").
-    """
+    """Записывает данные о продуктах в Excel-файл."""
     if not products_data:
-        logger.warning("Нет данных для записи в Excel")
         return
 
-    logger.info(f"Запись данных в Excel-файл: {filename}")
     df = pd.DataFrame.from_dict(products_data, orient="index")
     with pd.ExcelWriter(filename, engine="openpyxl") as writer:
         df.to_excel(writer, sheet_name="Products", index=False)
@@ -36,4 +30,3 @@ def write_data_to_excel(
         for cell in worksheet[1]:
             cell.font = Font(bold=True)
             cell.alignment = Alignment(horizontal="center")
-    logger.info(f"Excel-файл сохранён: {filename}")

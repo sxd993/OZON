@@ -3,7 +3,6 @@ import ssl
 import time
 import gc
 import os
-import sys
 from contextlib import redirect_stderr
 from utils.logger import setup_logger
 from utils.collect_product_data import collect_data
@@ -21,7 +20,7 @@ async def main(
     query: str, max_products: int, output_file: str, progress_handler=None
 ) -> None:
     """Функция запуска программы."""
-    logger.info(f"Запуск парсера с запросом: {query}, максимум товаров: {max_products}")
+    logger.info(f"Запуск парсера с запросом: {query}")
     driver = None
     original_window = None
     worker_tab = None
@@ -30,32 +29,26 @@ async def main(
         driver = preparation_before_work(item_name=query)
         original_window = driver.current_window_handle
         logger.info("Браузер успешно открыт")
-        logger.info("Сбор ссылок на товары")
         products_urls_list = page_down(
             driver=driver, css_selector="a[href*='/product/']", colvo=max_products
         )
         logger.info(f"Найдено товаров: {len(products_urls_list)}")
-        if len(products_urls_list) >= max_products:
-            logger.info(f"Достигнут лимит max_products: {max_products}")
         products_urls = {str(i): url for i, url in enumerate(products_urls_list)}
 
-        # Открываем одну рабочую вкладку
         driver.execute_script("window.open('');")
         worker_tab = driver.window_handles[-1]
         driver.switch_to.window(worker_tab)
         logger.info("Рабочая вкладка открыта")
 
-        logger.info("Начало сбора данных о товарах")
         collect_data(
             products_urls=products_urls,
             driver=driver,
             progress_handler=progress_handler,
             output_file=output_file,
         )
-        logger.info("Сбор данных завершён")
         logger.info(f"Excel-файл сохранён: {output_file}")
     except Exception as e:
-        logger.error(f"Ошибка в main: {str(e)}")
+        logger.error(f"Ошибка в main: {e}")
         raise
     finally:
         if driver is not None:
@@ -63,20 +56,16 @@ async def main(
                 if worker_tab and worker_tab in driver.window_handles:
                     driver.switch_to.window(worker_tab)
                     driver.close()
-                    logger.info("Рабочая вкладка закрыта")
                 if original_window and original_window in driver.window_handles:
                     driver.switch_to.window(original_window)
-                    logger.info("Переключение на исходное окно")
                 logger.info("Закрытие браузера")
                 driver.quit()
-                logger.info("Браузер закрыт")
-            except Exception as e:
-                logger.warning(f"Ошибка при закрытии драйвера: {str(e)}")
+            except Exception:
+                pass
             with open(os.devnull, "w") as devnull:
                 with redirect_stderr(devnull):
                     del driver
                     gc.collect()
-                    logger.info("Сборка мусора завершена")
 
 
 if __name__ == "__main__":
