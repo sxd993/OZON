@@ -23,10 +23,14 @@ async def main(
     """Функция запуска программы."""
     logger.info(f"Запуск парсера с запросом: {query}, максимум товаров: {max_products}")
     driver = None
+    original_window = None
+    worker_tab = None
     try:
-        logger.info("Открытие браузера")
+        logger.info("Инициализация браузера")
         driver = preparation_before_work(item_name=query)
+        original_window = driver.current_window_handle
         logger.info("Браузер успешно открыт")
+        logger.info("Сбор ссылок на товары")
         products_urls_list = page_down(
             driver=driver, css_selector="a[href*='/product/']", colvo=max_products
         )
@@ -35,6 +39,13 @@ async def main(
             logger.info(f"Достигнут лимит max_products: {max_products}")
         products_urls = {str(i): url for i, url in enumerate(products_urls_list)}
 
+        # Открываем одну рабочую вкладку
+        driver.execute_script("window.open('');")
+        worker_tab = driver.window_handles[-1]
+        driver.switch_to.window(worker_tab)
+        logger.info("Рабочая вкладка открыта")
+
+        logger.info("Начало сбора данных о товарах")
         collect_data(
             products_urls=products_urls,
             driver=driver,
@@ -45,15 +56,21 @@ async def main(
         logger.info(f"Excel-файл сохранён: {output_file}")
     except Exception as e:
         logger.error(f"Ошибка в main: {str(e)}")
+        raise
     finally:
         if driver is not None:
             try:
+                if worker_tab and worker_tab in driver.window_handles:
+                    driver.switch_to.window(worker_tab)
+                    driver.close()
+                    logger.info("Рабочая вкладка закрыта")
+                if original_window and original_window in driver.window_handles:
+                    driver.switch_to.window(original_window)
+                    logger.info("Переключение на исходное окно")
                 logger.info("Закрытие браузера")
-                driver.close()
-                time.sleep(0.1)
                 driver.quit()
                 logger.info("Браузер закрыт")
-            except OSError as e:
+            except Exception as e:
                 logger.warning(f"Ошибка при закрытии драйвера: {str(e)}")
             with open(os.devnull, "w") as devnull:
                 with redirect_stderr(devnull):

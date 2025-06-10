@@ -156,8 +156,6 @@ def get_ozon_seller_info(
     :return: Кортеж (данные продавца, ссылка на профиль) или None в случае ошибки.
     """
     logger.info(f"Получение данных продавца по ссылке: {seller_href}")
-    original_window = driver.current_window_handle
-    new_window = None
     try:
         driver.get(seller_href)
         wait = WebDriverWait(driver, 25)
@@ -228,12 +226,6 @@ def get_ozon_seller_info(
         )
         return None
 
-    finally:
-        if new_window:
-            driver.switch_to.window(new_window)
-            driver.close()
-        driver.switch_to.window(original_window)
-
 
 def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]]:
     """
@@ -243,11 +235,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
     :return: Словарь с данными о товаре.
     """
     logger.info(f"Обработка URL товара: {url}")
-    original_window = driver.current_window_handle
-    new_window = None
     try:
-        driver.switch_to.new_window("tab")
-        new_window = driver.current_window_handle
         driver.get(url)
         wait = WebDriverWait(driver, 25)
         soup = BeautifulSoup(driver.page_source, "lxml")
@@ -276,6 +264,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             seller_info_tuple = get_ozon_seller_info(driver, seller_href)
             seller_info = seller_info_tuple[0] if seller_info_tuple else None
 
+        logger.info(f"Данные о товаре собраны: {product_name}")
         return {
             "Артикул": product_id,
             "Название товара": product_name,
@@ -307,9 +296,3 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             "Данные": None,
             "Ссылка на товар": url,
         }
-
-    finally:
-        if new_window:
-            driver.switch_to.window(new_window)
-            driver.close()
-        driver.switch_to.window(original_window)
