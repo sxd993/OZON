@@ -31,7 +31,8 @@ def collect_data(
             progress_handler.update()
 
         if processed_count % 2 == 0:
-            write_data_to_excel(products_data=products_data, filename=output_file)
+            write_data_to_excel(products_data=products_data,
+                                filename=output_file)
 
     if products_data:
         write_data_to_excel(products_data=products_data, filename=output_file)

@@ -20,7 +20,7 @@ def preparation_before_work(item_name: str) -> WebDriver:
 
     logger.info("Переход на сайт Ozon")
     driver.get(url="https://ozon.ru")
-    time.sleep(5)
+    time.sleep(4)
     logger.info(f"Ввод поискового запроса: {item_name}")
     find_input = driver.find_element(By.NAME, "text")
     find_input.clear()
@@ -28,7 +28,7 @@ def preparation_before_work(item_name: str) -> WebDriver:
     find_input.send_keys(item_name)
     time.sleep(2)
     find_input.send_keys(Keys.ENTER)
-    time.sleep(1)
+    time.sleep(2)
     logger.info("Поисковый запрос отправлен")
 
     return driver

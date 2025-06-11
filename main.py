@@ -1,6 +1,5 @@
 import warnings
 import ssl
-import time
 import gc
 import os
 from contextlib import redirect_stderr
@@ -33,7 +32,8 @@ async def main(
             driver=driver, css_selector="a[href*='/product/']", colvo=max_products
         )
         logger.info(f"Найдено товаров: {len(products_urls_list)}")
-        products_urls = {str(i): url for i, url in enumerate(products_urls_list)}
+        products_urls = {
+            str(i): url for i, url in enumerate(products_urls_list)}
 
         driver.execute_script("window.open('');")
         worker_tab = driver.window_handles[-1]

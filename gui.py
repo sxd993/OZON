@@ -1,31 +1,68 @@
 import sys
 import asyncio
+import logging
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QFileDialog
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt5.QtCore import Qt, QObject
 from PyQt5 import QtGui
 import qasync
 from main import main
+from utils.logger import setup_logger
+
+logger = setup_logger(log_file="gui.log")
+
+
+class StatusOutputHandler(logging.Handler):
+    """Кастомный обработчик логов для вывода сообщений в QTextEdit."""
+
+    def __init__(self, text_widget):
+        super().__init__()
+        self.text_widget = text_widget
+
+    def emit(self, record):
+        msg = self.format(record)
+        QApplication.processEvents()
+        self.text_widget.append(msg)
+
 
 class ProgressHandler(QObject):
     """Заглушка для совместимости с main.py."""
+
     def __init__(self):
         super().__init__()
+        logger.debug("ProgressHandler initialized")
 
     def update(self, n=1):
+        logger.debug(f"ProgressHandler update called with n={n}")
         pass
 
     def set_total(self, total):
+        logger.debug(f"ProgressHandler set_total called with total={total}")
         pass
 
     def __call__(self, progress):
+        logger.debug(f"ProgressHandler called with progress={progress}")
         pass
+
 
 class ParserApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        logger.info("Initializing ParserApp")
+        try:
+            self.initUI()
+            ozon_logger = logging.getLogger("OzonParser")
+            status_handler = StatusOutputHandler(self.status_output)
+            status_handler.setFormatter(logging.Formatter(
+                "%(asctime)s - %(levelname)s - %(message)s"))
+            ozon_logger.addHandler(status_handler)
+            logger.info("ParserApp UI initialized successfully")
+        except Exception as e:
+            logger.error(
+                f"Error initializing ParserApp UI: {str(e)}", exc_info=True)
+            raise
 
     def initUI(self):
+        logger.debug("Setting up UI components")
         self.setWindowTitle("Парсер Ozon")
         self.setGeometry(100, 100, 500, 650)
         self.setStyleSheet("""
@@ -35,7 +72,6 @@ class ParserApp(QMainWindow):
             }
         """)
 
-        # Основной виджет и layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
@@ -43,7 +79,6 @@ class ParserApp(QMainWindow):
         main_layout.setSpacing(20)
         main_layout.setContentsMargins(30, 30, 30, 30)
 
-        # Заголовок
         title_label = QLabel("Парсер Ozon")
         title_label.setStyleSheet("""
             font-size: 24px; 
@@ -57,7 +92,6 @@ class ParserApp(QMainWindow):
         title_layout.addStretch()
         main_layout.addLayout(title_layout)
 
-        # Поле для поискового запроса
         self.query_label = QLabel("Поисковый запрос:")
         self.query_label.setStyleSheet("""
             font-size: 14px; 
@@ -81,15 +115,15 @@ class ParserApp(QMainWindow):
         main_layout.addWidget(self.query_label)
         main_layout.addLayout(query_layout)
 
-        # Поле для количества товаров
-        self.max_products_label = QLabel("Количество товаров:")
+        self.max_products_label = QLabel("Количество товаров (0 для всех):")
         self.max_products_label.setStyleSheet("""
             font-size: 14px; 
             color: #334155; 
             font-family: 'Arial', sans-serif;
         """)
         self.max_products_input = QLineEdit("50")
-        self.max_products_input.setValidator(QtGui.QIntValidator(1, 100000))
+        self.max_products_input.setValidator(
+            QtGui.QIntValidator(0, 100000))  # Разрешаем 0
         self.max_products_input.setStyleSheet("""
             font-size: 14px; 
             padding: 10px; 
@@ -105,7 +139,6 @@ class ParserApp(QMainWindow):
         main_layout.addWidget(self.max_products_label)
         main_layout.addLayout(max_products_layout)
 
-        # Поле для имени выходного файла
         self.output_file_label = QLabel("Выходной файл:")
         self.output_file_label.setStyleSheet("""
             font-size: 14px; 
@@ -145,7 +178,6 @@ class ParserApp(QMainWindow):
         main_layout.addWidget(self.output_file_label)
         main_layout.addLayout(output_file_layout)
 
-        # Кнопка для запуска парсинга
         self.parse_button = QPushButton("Начать парсинг")
         self.parse_button.setStyleSheet("""
             QPushButton {
@@ -173,7 +205,6 @@ class ParserApp(QMainWindow):
         self.parse_button.clicked.connect(self.start_parsing)
         main_layout.addLayout(parse_button_layout)
 
-        # Поле для статуса
         self.status_output = QTextEdit()
         self.status_output.setReadOnly(True)
         self.status_output.setStyleSheet("""
@@ -191,52 +222,87 @@ class ParserApp(QMainWindow):
         status_layout.addWidget(self.status_output, 1)
         status_layout.addStretch()
         main_layout.addLayout(status_layout)
+        logger.debug("UI components setup completed")
 
     def browse_file(self):
-        """Открыть диалог выбора файла."""
-        file_path, _ = QFileDialog.getSaveFileName(
-            self, "Выберите файл для сохранения", "", "Excel Files (*.xlsx);;All Files (*)"
-        )
-        if file_path:
-            self.output_file_input.setText(file_path)
+        logger.info("Opening file dialog for output file selection")
+        try:
+            file_path, _ = QFileDialog.getSaveFileName(
+                self, "Выберите файл для сохранения", "", "Excel Files (*.xlsx);;All Files (*)"
+            )
+            if file_path:
+                self.output_file_input.setText(file_path)
+                logger.info(f"Selected output file: {file_path}")
+            else:
+                logger.debug("File dialog cancelled")
+        except Exception as e:
+            logger.error(f"Error in browse_file: {str(e)}", exc_info=True)
+            self.status_output.append(f"Ошибка при выборе файла: {str(e)}")
 
     async def run_parsing(self, query, max_products, output_file, progress_handler):
-        """Запуск парсинга."""
+        logger.info(
+            f"Starting parsing with query='{query}', max_products={max_products}, output_file='{output_file}'")
         try:
             await main(query, max_products, output_file, progress_handler)
-            self.status_output.append(f"Парсинг завершён. Файл сохранён: {output_file}")
+            self.status_output.append(
+                f"Парсинг завершён. Файл сохранён: {output_file}")
+            logger.info(
+                f"Parsing completed successfully, file saved: {output_file}")
         except Exception as e:
+            logger.error(f"Error during parsing: {str(e)}", exc_info=True)
             self.status_output.append(f"Ошибка при парсинге: {str(e)}")
         finally:
             self.parse_button.setEnabled(True)
+            logger.debug("Parse button re-enabled")
 
     @qasync.asyncSlot()
     async def start_parsing(self):
-        """Запуск парсинга при нажатии кнопки."""
-        query = self.query_input.text().strip()
-        if not query:
-            self.status_output.append("Ошибка: Введите поисковый запрос")
-            return
+        logger.info("Start parsing button clicked")
         try:
-            max_products = int(self.max_products_input.text())
-        except ValueError:
-            self.status_output.append("Ошибка: Введите корректное число для количества товаров")
-            return
-        output_file = self.output_file_input.text().strip()
-        if not output_file:
-            self.status_output.append("Ошибка: Введите имя выходного файла")
-            return
-        self.parse_button.setEnabled(False)
-        self.status_output.append("Парсинг начат...")
-        progress_handler = ProgressHandler()
-        await self.run_parsing(query, max_products, output_file, progress_handler)
+            query = self.query_input.text().strip()
+            if not query:
+                self.status_output.append("Ошибка: Введите поисковый запрос")
+                logger.warning("Empty query provided")
+                return
+            try:
+                max_products = int(self.max_products_input.text())
+                logger.debug(f"Max products set to: {max_products}")
+            except ValueError:
+                self.status_output.append(
+                    "Ошибка: Введите корректное число для количества товаров")
+                logger.warning("Invalid max_products value provided")
+                return
+            output_file = self.output_file_input.text().strip()
+            if not output_file:
+                self.status_output.append(
+                    "Ошибка: Введите имя выходного файла")
+                logger.warning("Empty output file name provided")
+                return
+            self.parse_button.setEnabled(False)
+            logger.debug("Parse button disabled")
+            self.status_output.append("Парсинг начат...")
+            progress_handler = ProgressHandler()
+            await self.run_parsing(query, max_products, output_file, progress_handler)
+        except Exception as e:
+            logger.error(f"Error in start_parsing: {str(e)}", exc_info=True)
+            self.status_output.append(f"Ошибка: {str(e)}")
+            self.parse_button.setEnabled(True)
+            logger.debug("Parse button re-enabled after error")
+
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setStyle('Fusion')  # Для кроссплатформенной совместимости
-    loop = qasync.QEventLoop(app)
-    asyncio.set_event_loop(loop)
-    window = ParserApp()
-    window.show()
-    with loop:
-        loop.run_forever()
+    logger.info("Starting QApplication")
+    try:
+        app = QApplication(sys.argv)
+        app.setStyle('Fusion')
+        loop = qasync.QEventLoop(app)
+        asyncio.set_event_loop(loop)
+        window = ParserApp()
+        window.show()
+        logger.info("Application window shown")
+        with loop:
+            loop.run_forever()
+    except Exception as e:
+        logger.error(
+            f"Error in main application loop: {str(e)}", exc_info=True)
+        raise
