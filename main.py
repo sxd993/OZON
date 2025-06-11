@@ -29,11 +29,16 @@ async def main(
         original_window = driver.current_window_handle
         logger.info("Браузер успешно открыт")
         products_urls_list = page_down(
-            driver=driver, css_selector="a[href*='/product/']", colvo=max_products
+            driver=driver,
+            css_selector="a[href*='/product/']",
+            colvo=max_products,
+            # Уникальный файл для каждого запроса
+            temp_file=f"temp_links_{query.replace(' ', '_')}.txt"
         )
         logger.info(f"Найдено товаров: {len(products_urls_list)}")
         products_urls = {
-            str(i): url for i, url in enumerate(products_urls_list)}
+            str(i): url for i, url in enumerate(products_urls_list)
+        }
 
         driver.execute_script("window.open('');")
         worker_tab = driver.window_handles[-1]
