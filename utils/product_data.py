@@ -4,16 +4,12 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import (
-    TimeoutException,
-    WebDriverException,
-    NoSuchWindowException,
-)
+from selenium.common.exceptions import TimeoutException, WebDriverException
 import time
+import re
 from utils.logger import setup_logger
 
 logger = setup_logger()
-
 
 def _get_stars_reviews(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str]]:
     """Извлекает рейтинг и количество отзывов продавца."""
@@ -28,8 +24,8 @@ def _get_stars_reviews(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str
                 return stars.strip(), reviews.strip()
         return None, None
     except Exception:
+        logger.warning("Не удалось извлечь рейтинг и отзывы")
         return None, None
-
 
 def _get_sale_price(soup: BeautifulSoup) -> Optional[str]:
     """Извлекает цену с Ozon Картой."""
@@ -48,8 +44,8 @@ def _get_sale_price(soup: BeautifulSoup) -> Optional[str]:
         price = price_span.text.strip().replace("\u2009", "").replace("₽", "").strip()
         return price
     except Exception:
+        logger.warning("Не удалось извлечь цену с Ozon Картой")
         return None
-
 
 def _get_full_prices(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str]]:
     """Извлекает цену до скидок и без Ozon Карты."""
@@ -81,8 +77,8 @@ def _get_full_prices(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str]]
         )
         return discount_price, base_price
     except Exception:
+        logger.warning("Не удалось извлечь цены")
         return None, None
-
 
 def _get_product_name(soup: BeautifulSoup) -> str:
     """Извлекает название товара."""
@@ -96,8 +92,8 @@ def _get_product_name(soup: BeautifulSoup) -> str:
         name = title_element.text.strip().replace("\t", "").replace("\n", " ")
         return name
     except Exception:
+        logger.warning("Не удалось извлечь название товара")
         return ""
-
 
 def _get_salesman_name(soup: BeautifulSoup) -> Optional[str]:
     """Извлекает имя продавца."""
@@ -112,8 +108,8 @@ def _get_salesman_name(soup: BeautifulSoup) -> Optional[str]:
                 return text
         return None
     except Exception:
+        logger.warning("Не удалось извлечь имя продавца")
         return None
-
 
 def _get_product_id(driver: WebDriver) -> Optional[str]:
     """Извлекает артикул товара."""
@@ -122,8 +118,8 @@ def _get_product_id(driver: WebDriver) -> Optional[str]:
         product_id = element.text.split("Артикул: ")[1].strip()
         return product_id
     except Exception:
+        logger.warning("Не удалось извлечь артикул")
         return None
-
 
 def _get_product_brand(soup: BeautifulSoup) -> Optional[str]:
     """Извлекает бренд товара из хлебных крошек."""
@@ -139,64 +135,109 @@ def _get_product_brand(soup: BeautifulSoup) -> Optional[str]:
         brand = brand_tag.get_text(strip=True) if brand_tag else None
         return brand
     except Exception:
+        logger.warning("Не удалось извлечь бренд")
         return None
 
-
-def get_ozon_seller_info(driver: WebDriver) -> Optional[str]:
-    """Извлекает информацию о продавце из модального окна на странице товара."""
-    try:
-        seller_block = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "div[data-widget='webCurrentSeller']")
-            )
-        )
-        svg = seller_block.find_element(
-            By.CSS_SELECTOR,
-            "svg path[d='M8 0c4.964 0 8 3.036 8 8s-3.036 8-8 8-8-3.036-8-8 3.036-8 8-8m-.889 11.556a.889.889 0 0 0 1.778 0V8A.889.889 0 0 0 7.11 8zM8.89 4.444a.889.889 0 1 0-1.778 0 .889.889 0 0 0 1.778 0']",
-        )
-        button = svg.find_element(By.XPATH, "./ancestor::button")
-        WebDriverWait(driver, 10).until(EC.element_to_be_clickable(button))
-        try:
-            button.click()
-        except Exception:
-            driver.execute_script("arguments[0].click();", button)
-        time.sleep(1)
-
-        modal = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "div[data-popper-placement='top']")
-            )
-        )
-        soup = BeautifulSoup(driver.page_source, "lxml")
-        modal_div = soup.select_one("div[data-popper-placement='top']")
-        if not modal_div:
-            return None
-
-        paragraphs = modal_div.find_all("p")
-        if not paragraphs:
-            return None
-        seller_info = [p.get_text(strip=True) for p in paragraphs[:-1]]
-        result = "; ".join(seller_info) if seller_info else None
-        return result
-
-    except Exception:
-        return None
-
-
-def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]]:
-    """Собирает информацию о товаре с сайта Ozon."""
+def get_ozon_seller_info(
+    driver: WebDriver, seller_href: str
+) -> Optional[Tuple[str, str, str]]:
+    """
+    Извлекает информацию о продавце с сайта Ozon из модального окна (data-widget='modalLayout').
+    :param driver: WebDriver для управления браузером.
+    :param seller_href: URL страницы продавца.
+    :return: Кортеж (данные продавца, ИНН/номер, ссылка на профиль) или None в случае ошибки.
+    """
+    logger.info(f"Получение данных продавца по ссылке: {seller_href}")
     original_window = driver.current_window_handle
     new_window = None
     try:
-        driver.switch_to.new_window("tab")
-        new_window = driver.current_window_handle
-        driver.get(url)
-        wait = WebDriverWait(driver, 10)
-        wait.until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "div[data-widget='webProductHeading']")
-            )
+        driver.get(seller_href)
+        wait = WebDriverWait(driver, 25)
+
+        max_attempts = 3
+        for attempt in range(max_attempts):
+            try:
+                xpath = (
+                    "//*[name()='svg']"
+                    "/*[name()='path' and @d=\"M12 21c5.584 0 9-3.416 9-9s-3.416-9-9-9-9 3.416-9 9 "
+                    '3.416 9 9 9m1-13a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-2 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0z"]'
+                    "/ancestor::button"
+                )
+
+                clickable_button = WebDriverWait(driver, timeout=10).until(
+                    EC.element_to_be_clickable((By.XPATH, xpath))
+                )
+                clickable_button.click()
+                time.sleep(0.5)
+                logger.info("Нажата кнопка информации о продавце")
+                break
+            except TimeoutException:
+                if attempt == max_attempts - 1:
+                    logger.warning(
+                        "Не удалось нажать кнопку информации о продавце после всех попыток"
+                    )
+                    return None
+                time.sleep(1)
+
+        soup = BeautifulSoup(driver.page_source, "lxml")
+        modal = soup.find("div", attrs={"data-widget": "modalLayout"})
+        if not modal:
+            logger.warning("Модальное окно не найдено")
+            return None
+
+        text_blocks = modal.find_all("div", attrs={"data-widget": "textBlock"})
+        if not text_blocks:
+            logger.warning("Блоки textBlock не найдены в модальном окне")
+            return None
+
+        # Берем последний textBlock, содержащий данные продавца
+        last_block = text_blocks[-1]
+        spans = last_block.select("div.bq011-a span")
+        if not spans:
+            logger.warning("Не найдены span элементы в последнем textBlock")
+            return None
+
+        # Исключаем последний span (например, "Работает согласно графику Ozon")
+        spans = spans[:-1]
+        if not spans:
+            logger.warning("Нет данных продавца после исключения последнего span")
+            return None
+
+        # Обрабатываем первый span, который содержит имя и ИНН
+        text = spans[0].get_text(strip=True)
+        inn_match = re.search(r"^(.+?)(\d{10}|\d{12}|\d{15})$", text)
+        if inn_match:
+            seller_name, inn = inn_match.groups()
+            seller_name = seller_name.strip()
+            logger.info(f"Извлечены данные продавца: {seller_name}, ИНН: {inn}")
+            return (seller_name, inn, seller_href)
+        else:
+            logger.warning("Не удалось разделить имя и ИНН продавца")
+            return (text, None, seller_href)
+
+    except (TimeoutException, WebDriverException, IndexError) as e:
+        logger.warning(
+            f"Ошибка при получении данных продавца по ссылке {seller_href}: {str(e)}"
         )
+        return None
+
+    finally:
+        if new_window:
+            driver.switch_to.window(new_window)
+            driver.close()
+        driver.switch_to.window(original_window)
+
+def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]]:
+    """
+    Собирает информацию о товаре с сайта Ozon.
+    :param driver: WebDriver для управления браузером.
+    :param url: URL страницы товара.
+    :return: Словарь с данными о товаре.
+    """
+    logger.info(f"Обработка URL товара: {url}")
+    try:
+        driver.get(url)
+        wait = WebDriverWait(driver, 25)
         soup = BeautifulSoup(driver.page_source, "lxml")
 
         seller_href = None
@@ -208,7 +249,7 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
             )
             seller_href = seller_link.get_attribute("href")
         except TimeoutException:
-            pass
+            logger.warning("Не удалось извлечь ссылку на продавца")
 
         product_id = _get_product_id(driver)
         product_name = _get_product_name(soup)
@@ -217,45 +258,45 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
         product_discount_price, product_base_price = _get_full_prices(soup)
         salesman = _get_salesman_name(soup)
         product_brand = _get_product_brand(soup)
-        seller_info = get_ozon_seller_info(driver).rsplit(";", 1)
 
+        seller_info = None
+        seller_inn = None
+        if seller_href:
+            seller_info_tuple = get_ozon_seller_info(driver, seller_href)
+            if seller_info_tuple:
+                seller_info, seller_inn, _ = seller_info_tuple
+
+        logger.info(f"Данные о товаре собраны: {product_name}")
         return {
             "Артикул": product_id,
-            "Название": product_name,
+            "Название товара": product_name,
             "Бренд": product_brand,
-            "Ссылка на товар": url,
-            "Цена": product_base_price,
             "Цена с картой озона": product_ozon_card_price,
             "Цена со скидкой": product_discount_price,
-            "Отзывы": product_reviews,
+            "Цена": product_base_price,
             "Рейтинг": product_stars,
+            "Отзывы": product_reviews,
             "Продавец": salesman,
-            "Данные": seller_info[0],
-            "ИНН": seller_info[1],
             "Ссылка на продавца": seller_href,
+            "Данные продавца": seller_info,
+            "ИНН продавца": seller_inn,
+            "Ссылка на товар": url,
         }
 
-    except (TimeoutException, WebDriverException, NoSuchWindowException):
+    except (TimeoutException, WebDriverException) as e:
+        logger.warning(f"Ошибка при обработке URL товара {url}: {str(e)}")
         return {
             "Артикул": None,
-            "Название": None,
+            "Название товара": None,
             "Бренд": None,
-            "Ссылка на товар": url,
-            "Цена": None,
             "Цена с картой озона": None,
             "Цена со скидкой": None,
-            "Отзывы": None,
+            "Цена": None,
             "Рейтинг": None,
+            "Отзывы": None,
             "Продавец": None,
-            "Данные": None,
-            "ИНН": None,
             "Ссылка на продавца": None,
+            "Данные продавца": None,
+            "ИНН продавца": None,
+            "Ссылка на товар": url,
         }
-    finally:
-        try:
-            if new_window and new_window in driver.window_handles:
-                driver.switch_to.window(new_window)
-                driver.close()
-            driver.switch_to.window(original_window)
-        except Exception:
-            pass
