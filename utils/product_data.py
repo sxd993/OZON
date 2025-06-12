@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
 import time
 import re
+import gc
 from utils.logger import setup_logger
 
 logger = setup_logger()
@@ -28,6 +29,8 @@ def _get_stars_reviews(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str
     except Exception as e:
         logger.warning(f"Ошибка при извлечении рейтинга и отзывов: {str(e)}")
         return None, None
+    finally:
+        product_statistic = None  # Очистка переменной
 
 
 def _get_sale_price(soup: BeautifulSoup) -> Optional[str]:
@@ -41,7 +44,12 @@ def _get_sale_price(soup: BeautifulSoup) -> Optional[str]:
             if price_container:
                 price_span = price_container.find("span")
                 if price_span and price_span.text:
-                    price = price_span.text.strip().replace("\u2009", "").replace("₽", "").strip()
+                    price = (
+                        price_span.text.strip()
+                        .replace("\u2009", "")
+                        .replace("₽", "")
+                        .strip()
+                    )
                     logger.debug(f"Извлечена цена с Ozon Картой: {price}")
                     return price
 
@@ -49,9 +57,10 @@ def _get_sale_price(soup: BeautifulSoup) -> Optional[str]:
         if price_spans:
             for span in price_spans:
                 if span.text and "₽" in span.text:
-                    price = span.text.strip().replace("\u2009", "").replace("₽", "").strip()
-                    logger.debug(
-                        f"Извлечена скидочная цена (без надписей): {price}")
+                    price = (
+                        span.text.strip().replace("\u2009", "").replace("₽", "").strip()
+                    )
+                    logger.debug(f"Извлечена скидочная цена (без надписей): {price}")
                     return price
 
         logger.debug("Не найден элемент с ценой")
@@ -59,6 +68,10 @@ def _get_sale_price(soup: BeautifulSoup) -> Optional[str]:
     except Exception as e:
         logger.warning(f"Ошибка при извлечении цены с Ozon Картой: {str(e)}")
         return None
+    finally:
+        price_element = price_container = price_span = price_spans = (
+            None  # Очистка переменных
+        )
 
 
 def _get_full_prices(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str]]:
@@ -72,23 +85,34 @@ def _get_full_prices(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str]]
             if price_containers:
                 price_spans = price_containers.find_all("span")
                 if price_spans:
-                    discount_price = _clean_price(
-                        price_spans[0].text.strip()) if price_spans else None
-                    base_price = _clean_price(price_spans[1].text.strip(
-                    )) if price_spans and len(price_spans) > 1 else None
+                    discount_price = (
+                        _clean_price(price_spans[0].text.strip())
+                        if price_spans
+                        else None
+                    )
+                    base_price = (
+                        _clean_price(price_spans[1].text.strip())
+                        if price_spans and len(price_spans) > 1
+                        else None
+                    )
                     logger.debug(
-                        f"Извлечены цены: скидочная={discount_price}, базовая={base_price}")
+                        f"Извлечены цены: скидочная={discount_price}, базовая={base_price}"
+                    )
                     return discount_price, base_price
 
         price_spans = soup.find_all("span", class_=True)
         if price_spans and len(price_spans) >= 2:
-            prices = [span.text.strip().replace("\u2009", "").replace(
-                "₽", "").strip() for span in price_spans if span.text and "₽" in span.text]
+            prices = [
+                span.text.strip().replace("\u2009", "").replace("₽", "").strip()
+                for span in price_spans
+                if span.text and "₽" in span.text
+            ]
             if len(prices) >= 2:
                 discount_price = prices[0]
                 base_price = prices[1]
                 logger.debug(
-                    f"Извлечены цены (без надписей): скидочная={discount_price}, базовая={base_price}")
+                    f"Извлечены цены (без надписей): скидочная={discount_price}, базовая={base_price}"
+                )
                 return discount_price, base_price
 
         logger.debug("Не найдены элементы с ценами")
@@ -96,6 +120,10 @@ def _get_full_prices(soup: BeautifulSoup) -> Tuple[Optional[str], Optional[str]]
     except Exception as e:
         logger.warning(f"Ошибка при извлечении цен: {str(e)}")
         return None, None
+    finally:
+        price_element = price_containers = price_spans = prices = (
+            None  # Очистка переменных
+        )
 
 
 def _clean_price(price: str) -> str:
@@ -106,8 +134,7 @@ def _clean_price(price: str) -> str:
 def _get_product_name(soup: BeautifulSoup) -> str:
     """Извлекает название товара."""
     try:
-        heading_div = soup.find(
-            "div", attrs={"data-widget": "webProductHeading"})
+        heading_div = soup.find("div", attrs={"data-widget": "webProductHeading"})
         if not heading_div:
             logger.debug("Не найден div с data-widget='webProductHeading'")
             return ""
@@ -127,6 +154,8 @@ def _get_product_name(soup: BeautifulSoup) -> str:
     except Exception as e:
         logger.warning(f"Ошибка при извлечении названия товара: {str(e)}")
         return ""
+    finally:
+        heading_div = title_element = None  # Очистка переменных
 
 
 def _get_salesman_name(soup: BeautifulSoup) -> Optional[str]:
@@ -146,19 +175,22 @@ def _get_salesman_name(soup: BeautifulSoup) -> Optional[str]:
     except Exception as e:
         logger.warning(f"Ошибка при извлечении имени продавца: {str(e)}")
         return None
+    finally:
+        salesman_elements = None  # Очистка переменной
 
 
 def _get_product_id(driver: WebDriver) -> Optional[str]:
     """Извлекает артикул товара."""
     try:
-        element = driver.find_element(
-            By.XPATH, '//div[contains(text(), "Артикул: ")]')
+        element = driver.find_element(By.XPATH, '//div[contains(text(), "Артикул: ")]')
         product_id = element.text.split("Артикул: ")[1].strip()
         logger.debug(f"Извлечён артикул: {product_id}")
         return product_id
     except Exception as e:
         logger.warning(f"Ошибка при извлечении артикула: {str(e)}")
         return None
+    finally:
+        element = None  # Очистка переменной
 
 
 def _get_product_brand(soup: BeautifulSoup) -> Optional[str]:
@@ -180,6 +212,10 @@ def _get_product_brand(soup: BeautifulSoup) -> Optional[str]:
     except Exception as e:
         logger.warning(f"Ошибка при извлечении бренда: {str(e)}")
         return None
+    finally:
+        breadcrumbs = breadcrumb_items = last_item = brand_tag = (
+            None  # Очистка переменных
+        )
 
 
 def get_ozon_seller_info(
@@ -197,9 +233,7 @@ def get_ozon_seller_info(
         max_attempts = 3
         for attempt in range(max_attempts):
             try:
-                xpath = (
-                    "//*[name()='svg']/*[name()='path' and @d=\"M12 21c5.584 0 9-3.416 9-9s-3.416-9-9-9-9 3.416-9 9 3.416 9 9 9m1-13a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-2 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0z\"]/ancestor::button"
-                )
+                xpath = "//*[name()='svg']/*[name()='path' and @d=\"M12 21c5.584 0 9-3.416 9-9s-3.416-9-9-9-9 3.416-9 9 3.416 9 9 9m1-13a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-2 4a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0z\"]/ancestor::button"
                 clickable_button = wait.until(
                     EC.element_to_be_clickable((By.XPATH, xpath))
                 )
@@ -234,8 +268,7 @@ def get_ozon_seller_info(
 
         spans = spans[:-1]
         if not spans:
-            logger.warning(
-                "Нет данных продавца после исключения последнего span")
+            logger.warning("Нет данных продавца после исключения последнего span")
             return None
 
         text = spans[0].get_text(strip=True)
@@ -243,8 +276,7 @@ def get_ozon_seller_info(
         if inn_match:
             seller_name, inn = inn_match.groups()
             seller_name = seller_name.strip()
-            logger.info(
-                f"Извлечены данные продавца: {seller_name}, ИНН: {inn}")
+            logger.info(f"Извлечены данные продавца: {seller_name}, ИНН: {inn}")
             return (seller_name, inn, seller_href)
         else:
             logger.warning("Не удалось разделить имя и ИНН продавца")
@@ -255,9 +287,14 @@ def get_ozon_seller_info(
             f"Ошибка при получении данных продавца по ссылке {seller_href}: {str(e)}"
         )
         return None
-
     finally:
+        if "soup" in locals():
+            soup.decompose()  # Очистка объекта BeautifulSoup
+        modal = text_blocks = last_block = spans = clickable_button = (
+            None  # Очистка переменных
+        )
         driver.switch_to.window(original_window)
+        gc.collect()  # Принудительная сборка мусора
 
 
 def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]]:
@@ -313,15 +350,20 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
                 salesman,
                 product_brand,
                 seller_info,
-                seller_inn
+                seller_inn,
             ]
 
-            if all(field is None or (isinstance(field, str) and not field) for field in critical_fields):
+            if all(
+                field is None or (isinstance(field, str) and not field)
+                for field in critical_fields
+            ):
                 logger.warning(
-                    f"Попытка {attempt} не удалась: все поля пустые для URL {url}")
+                    f"Попытка {attempt} не удалась: все поля пустые для URL {url}"
+                )
                 if attempt == max_retries:
                     logger.error(
-                        f"Достигнуто максимальное количество попыток для URL {url}")
+                        f"Достигнуто максимальное количество попыток для URL {url}"
+                    )
                     return {
                         "Артикул": None,
                         "Название товара": None,
@@ -363,10 +405,12 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
 
         except (TimeoutException, WebDriverException) as e:
             logger.warning(
-                f"Ошибка при обработке URL товара {url} на попытке {attempt}: {str(e)}")
+                f"Ошибка при обработке URL товара {url} на попытке {attempt}: {str(e)}"
+            )
             if attempt == max_retries:
                 logger.error(
-                    f"Достигнуто максимальное количество попыток для URL {url}")
+                    f"Достигнуто максимальное количество попыток для URL {url}"
+                )
                 return {
                     "Артикул": None,
                     "Название товара": None,
@@ -384,3 +428,8 @@ def collect_product_info(driver: WebDriver, url: str) -> dict[str, Optional[str]
                 }
             attempt += 1
             time.sleep(2)  # Пауза перед повторной попыткой
+        finally:
+            if "soup" in locals():
+                soup.decompose()  # Очистка объекта BeautifulSoup
+            seller_link = None  # Очистка переменной
+            gc.collect()  # Принудительная сборка мусора
